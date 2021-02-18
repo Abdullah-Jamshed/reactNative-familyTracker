@@ -37,7 +37,7 @@ const LoginScreen = () => {
         <TouchableOpacity style={styles.button} activeOpacity={0.8}>
           <Text style={styles.buttonText}>Sign In</Text>
         </TouchableOpacity>
-        <View style={{marginTop: 5}}>
+        <View style={{marginTop: 8}}>
           <TouchableOpacity activeOpacity={0.8}>
             <Text
               style={[styles.buttonText, {color: 'red', fontWeight: 'normal'}]}>
@@ -46,7 +46,7 @@ const LoginScreen = () => {
           </TouchableOpacity>
         </View>
         <View style={styles.signUp}>
-          <Text>Dont Have account?</Text>
+          <Text>Don't Have account?</Text>
           <TouchableOpacity activeOpacity={0.8}>
             <Text style={[styles.buttonText, {color: 'red', marginLeft: 5}]}>
               Sign Up
@@ -72,6 +72,7 @@ const styles = StyleSheet.create({
   headingText: {
     fontSize: 20,
     fontWeight: 'bold',
+    color: 'red',
   },
   textInput: {
     borderBottomWidth: 1.5,
