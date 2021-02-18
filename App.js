@@ -5,6 +5,8 @@ import store from './src/store';
 // Screen
 import LoginScreen from './src/screens/LoginScreen';
 import SignUpScreen from './src/screens/SignUpScreen';
+import HomeScreen from './src/screens/HomeScreen';
+import MapScreen from './src/screens/MapScreen';
 
 //Component
 // Redux
@@ -15,7 +17,9 @@ const App = () => {
       <SafeAreaView style={{flex: 1}}>
         <View style={styles.container}>
           {/* <LoginScreen /> */}
-          <SignUpScreen />
+          {/* <SignUpScreen /> */}
+          {/* <HomeScreen /> */}
+          <MapScreen />
         </View>
       </SafeAreaView>
     </Provider>
