@@ -37,6 +37,14 @@ const LoginScreen = () => {
         <TouchableOpacity style={styles.button} activeOpacity={0.8}>
           <Text style={styles.buttonText}>Sign In</Text>
         </TouchableOpacity>
+        <View style={styles.signUp}>
+          <Text>Dont Have account?</Text>
+          <TouchableOpacity activeOpacity={0.8}>
+            <Text style={[styles.buttonText, {color: 'red', marginLeft: 5}]}>
+              Sign Up
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -77,6 +85,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#ffffff',
     fontSize: 15,
+  },
+  signUp: {
+    position: 'absolute',
+    bottom: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    marginTop: 10,
   },
 });
 
