@@ -1,6 +1,10 @@
 import React from 'react';
 import {View, Text, TextInput, SafeAreaView, StyleSheet} from 'react-native';
+import {connect} from 'react-redux';
 
+// Screen
+//Component
+// Redux
 const LoginScreen = () => {
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -20,4 +24,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+const mapStatetoProps = (state) => {
+  return {};
+};
+const mapDispatchtoProps = () => {
+  return {};
+};
+
+export default connect(mapStatetoProps, mapDispatchtoProps)(LoginScreen);
