@@ -4,6 +4,7 @@ import {Provider} from 'react-redux';
 import store from './src/store';
 // Screen
 import LoginScreen from './src/screens/LoginScreen';
+import SignUpScreen from './src/screens/SignUpScreen';
 
 //Component
 // Redux
@@ -13,7 +14,8 @@ const App = () => {
     <Provider store={store}>
       <SafeAreaView style={{flex: 1}}>
         <View style={styles.container}>
-          <LoginScreen />
+          {/* <LoginScreen /> */}
+          <SignUpScreen />
         </View>
       </SafeAreaView>
     </Provider>
