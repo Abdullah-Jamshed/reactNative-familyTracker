@@ -37,6 +37,14 @@ const LoginScreen = () => {
         <TouchableOpacity style={styles.button} activeOpacity={0.8}>
           <Text style={styles.buttonText}>Sign In</Text>
         </TouchableOpacity>
+        <View style={{marginTop: 5}}>
+          <TouchableOpacity activeOpacity={0.8}>
+            <Text
+              style={[styles.buttonText, {color: 'red', fontWeight: 'normal'}]}>
+              Forgot Password?
+            </Text>
+          </TouchableOpacity>
+        </View>
         <View style={styles.signUp}>
           <Text>Dont Have account?</Text>
           <TouchableOpacity activeOpacity={0.8}>
