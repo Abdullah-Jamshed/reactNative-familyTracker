@@ -1,16 +1,23 @@
 import React from 'react';
-import {View,Text, TextInput, StyleSheet} from 'react-native';
+import {View, Text, TextInput, SafeAreaView, StyleSheet} from 'react-native';
 
 const LoginScreen = () => {
-  return <View></View>;
+  return (
+    <SafeAreaView style={{flex: 1}}>
+      <View style={styles.container}>
+        <Text>Login Screen</Text>
+      </View>
+    </SafeAreaView>
+  );
 };
 
-
 const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        backgroundColor:"#fffff"
-    }
-})
+  container: {
+    flex: 1,
+    backgroundColor: '#ffffff',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 export default LoginScreen;
