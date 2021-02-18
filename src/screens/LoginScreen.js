@@ -3,6 +3,7 @@ import {
   View,
   Text,
   TextInput,
+  TouchableOpacity,
   SafeAreaView,
   Dimensions,
   StyleSheet,
@@ -33,6 +34,9 @@ const LoginScreen = () => {
           textContentType="password"
           secureTextEntry={true}
         />
+        <TouchableOpacity style={styles.button} activeOpacity={0.8}>
+          <Text style={styles.buttonText}>Sign In</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -60,6 +64,19 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 5,
     marginVertical: 10,
+  },
+  button: {
+    backgroundColor: 'red',
+    width: width / 1.3,
+    padding: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  buttonText: {
+    fontWeight: 'bold',
+    color: '#ffffff',
+    fontSize: 15,
   },
 });
 
