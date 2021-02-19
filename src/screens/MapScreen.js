@@ -109,7 +109,7 @@ const MapScreen = () => {
                   longitude: location.longitude,
                 }}>
                 <View style={styles.pin}>
-                  {/* <MaterialIcons name="my-location" size={20} color="#02dcf9" /> */}
+                  <MaterialIcons name="my-location" size={20} color="#02dcf9" />
                 </View>
               </Marker>
             </>
@@ -131,6 +131,7 @@ const MapScreen = () => {
           strokeColor="#000"
           fillColor="#000"
         /> */}
+
       </MapView>
 
       <TouchableOpacity
