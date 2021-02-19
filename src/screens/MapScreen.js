@@ -31,7 +31,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 const {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
 
-const MapScreen = ({screenName}) => {
+const MapScreen = () => {
   const [location, setLocation] = useState(null);
   const [hasLocationPermission, setHasLocationPermission] = useState(null);
 
@@ -100,102 +100,21 @@ const MapScreen = ({screenName}) => {
           }
         }
         customMapStyle={mapStyle}>
-        {screenName === 'Home' && (
-          <>
-            {location && (
-              <>
-                <Marker
-                  coordinate={{
-                    latitude: location.latitude,
-                    longitude: location.longitude,
-                  }}>
-                  <View style={styles.pin}>
-                    <MaterialIcons
-                      name="my-location"
-                      size={20}
-                      color="#02dcf9"
-                    />
-                  </View>
-                </Marker>
-              </>
-            )}
-
-            <Marker
-              coordinate={{
-                latitude: 24.885204,
-                longitude: 67.169733,
-              }}>
-              <View style={styles.pin}>
-                <Fontisto name="map-marker-alt" size={30} color="#02dcf9" />
-              </View>
-            </Marker>
-
-            <Circle
-              key="test"
-              center={{
-                latitude: 24.885204,
-                longitude: 67.169733,
-              }}
-              radius={10}
-              strokeWidth={1}
-              strokeColor={'rgb(2,220,159)'}
-              fillColor={'rgba(2,220,159,.25)'}
-            />
-            <Marker
-              coordinate={{
-                latitude: 24.886192,
-                longitude: 67.175808,
-              }}>
-              <View style={styles.navigatorPin}>
-                <Ionicons name="navigate" size={20} color="#fff" />
-              </View>
-            </Marker>
-          </>
-        )}
-        {screenName === 'Book' && (
-          <>
-            <Circle
-              key="test"
-              center={{
-                latitude: 24.885204,
-                longitude: 67.169733,
-              }}
-              radius={10}
-              strokeWidth={1}
-              strokeColor={'rgb(2,220,159)'}
-              fillColor={'rgba(2,220,159,.25)'}
-            />
-            <Marker
-              coordinate={{
-                latitude: 24.885204,
-                longitude: 67.169733,
-              }}>
-              <View
-                style={[styles.navigationDot, {backgroundColor: '#02dcf9'}]}
-              />
-            </Marker>
-            <Circle
-              // key={(24.886252 + 67.175808).toString()}
-              center={{
-                latitude: 24.886192,
-                longitude: 67.175808,
-              }}
-              radius={60}
-              strokeWidth={1}
-              strokeColor={'rgb(247, 70, 86)'}
-              fillColor={'rgba(247, 70, 86,.25)'}
-            />
-            <Marker
-              coordinate={{
-                latitude: 24.886192,
-                longitude: 67.175808,
-              }}>
-              <View
-                style={[styles.navigationDot, {backgroundColor: '#f74656'}]}
-              />
-            </Marker>
-          </>
-        )}
+        <>
+          {location && (
+            <>
+              <Marker
+                coordinate={{
+                  latitude: location.latitude,
+                  longitude: location.longitude,
+                }}>
+                <View style={styles.pin}>
+                  {/* <MaterialIcons name="my-location" size={20} color="#02dcf9" /> */}
+                </View>
+              </Marker>
+            </>
+          )}
+        </>
 
         {/* <MapViewDirections
           mode="WALKING"
@@ -229,20 +148,6 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     flex: 1,
   },
-  navigatorPin: {
-    width: 40,
-    height: 40,
-    borderRadius: 60,
-    backgroundColor: '#000',
-    justifyContent: 'center',
-    alignItems: 'center',
-    opacity: 0.5,
-  },
-  navigationDot: {
-    width: 10,
-    height: 10,
-    borderRadius: 10,
-  },
   locationButton: {
     backgroundColor: '#ffff',
     width: 40,
@@ -260,7 +165,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.05,
     shadowRadius: 5,
-
     elevation: 3,
     zIndex: 1,
   },
