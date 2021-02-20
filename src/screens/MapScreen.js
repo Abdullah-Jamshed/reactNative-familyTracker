@@ -9,7 +9,7 @@ import {
 import {connect} from 'react-redux';
 
 // Libraries Components
-import MapView, {PROVIDER_GOOGLE, Marker, Circle} from 'react-native-maps';
+import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 // import MapViewDirections from 'react-native-maps-directions';
 
@@ -19,7 +19,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 // Map style
 import mapStyle from '../styles';
-
 
 const {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
