@@ -1,6 +1,4 @@
 import React, {useState, useEffect} from 'react';
-
-// React Native component
 import {
   View,
   StyleSheet,
@@ -13,20 +11,15 @@ import {connect} from 'react-redux';
 // Libraries Components
 import MapView, {PROVIDER_GOOGLE, Marker, Circle} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
-
 // import MapViewDirections from 'react-native-maps-directions';
 
-// Map style
-import mapStyle from '../styles';
-
-// env Variable
-
-// import {API_TOKEN} from '@env'; // get your api key from google map platform
-// console.log(API_TOKEN);
 // Icons
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+// Map style
+import mapStyle from '../styles';
+
 
 const {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -131,7 +124,6 @@ const MapScreen = () => {
           strokeColor="#000"
           fillColor="#000"
         /> */}
-
       </MapView>
 
       <TouchableOpacity
