@@ -8,6 +8,8 @@ import SignUpScreen from './src/screens/SignUpScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import MapScreen from './src/screens/MapScreen';
 
+import Navigation from './src/components/Navigation';
+
 //Component
 // Redux
 
@@ -18,8 +20,9 @@ const App = () => {
         <View style={styles.container}>
           {/* <LoginScreen /> */}
           {/* <SignUpScreen /> */}
+          {/* <MapScreen /> */}
           {/* <HomeScreen /> */}
-          <MapScreen />
+          <Navigation />
         </View>
       </SafeAreaView>
     </Provider>
