@@ -14,26 +14,36 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const {width, height} = Dimensions.get('window');
 
-const GroupScreen = ({navigation}) => {
+const GroupDetailScreen = ({navigation}) => {
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.container}>
         <View style={styles.headingContainer}>
-          <Text style={styles.heading}>Groups</Text>
+          <View
+            style={{
+              marginRight: 20,
+            }}>
+            <AntDesign
+              name="left"
+              size={25}
+              color={'#fe6666'}
+              onPress={() => navigation.goBack()}
+            />
+          </View>
+          <Text style={styles.heading}>Groups Details</Text>
         </View>
-        <View style={{marginTop:20,marginBottom: 190}}>
+        <View style={{marginTop: 20, marginBottom: 190}}>
           <ScrollView
             contentContainerStyle={{
               flexGrow: 1,
               width,
               paddingVertical: 20,
               paddingHorizontal: 10,
-            //   backgroundColor:"red"
+              //   backgroundColor:"red"
             }}>
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((k, i) => {
               return (
                 <TouchableOpacity
-                onPress={()=>navigation.navigate("GroupDetail")}
                   key={i}
                   activeOpacity={1}
                   style={styles.groupContainer}>
@@ -42,20 +52,14 @@ const GroupScreen = ({navigation}) => {
                       <AntDesign name="user" size={40} color={'#e6e6e6'} />
                     </View>
                     <View style={styles.groupDetail}>
-                      <Text>Group Name</Text>
-                      <Text style={{fontSize: 12}}>5 memebers</Text>
+                      <Text style={{fontSize: 15}}>Member Name</Text>
+                      {/* <Text style={{fontSize: 12}}>5 memebers</Text> */}
                     </View>
                   </View>
                 </TouchableOpacity>
               );
             })}
           </ScrollView>
-        </View>
-
-        <View style={styles.addGroupButtonContainer}>
-          <TouchableOpacity style={styles.addGroupButton}>
-            <AntDesign name="pluscircleo" size={40} color={'#fe6666'} />
-          </TouchableOpacity>
         </View>
       </View>
     </SafeAreaView>
@@ -76,9 +80,11 @@ const styles = StyleSheet.create({
     color: '#fe6666',
   },
   headingContainer: {
+    flexDirection: 'row',
     backgroundColor: '#fff',
     alignItems: 'center',
     padding: 10,
+    paddingTop: 20,
     width,
   },
   addGroupButtonContainer: {
@@ -114,8 +120,8 @@ const styles = StyleSheet.create({
   groupDetail: {
     paddingLeft: 10,
     paddingVertical: 5,
-    justifyContent: 'space-between',
+    justifyContent: 'center',
   },
 });
 
-export default GroupScreen;
+export default GroupDetailScreen;
