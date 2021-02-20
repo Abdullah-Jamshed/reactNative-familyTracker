@@ -7,6 +7,9 @@ import {
   StyleSheet,
 } from 'react-native';
 
+//  Icons
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
 const {width, height} = Dimensions.get('window');
 
 const TabBar = ({state: {routes}, navigation}) => {
@@ -19,33 +22,57 @@ const TabBar = ({state: {routes}, navigation}) => {
 
   return (
     <View style={styles.wrapper}>
-      {routes.map((route) => {
-        return (
-          <TouchableOpacity key={route.key} onPress={()=>routeChange(route)}>
-            <Text style={{color: route.name == selected ? 'red' : '#000'}}>
-              {route.name}
-            </Text>
-          </TouchableOpacity>
-        );
-      })}
+      <View style={styles.container}>
+        {routes.map((route) => {
+          return (
+            <TouchableOpacity
+              key={route.key}
+              activeOpacity={1}
+              onPress={() => routeChange(route)}
+              style={{alignItems: 'center'}}>
+              {route.params.icon && (
+                <AntDesign
+                  name={route.params.icon}
+                  color={route.name == selected ? 'red' : '#000'}
+                  size={20}
+                />
+              )}
+              <Text style={{color: route.name == selected ? 'red' : '#000'}}>
+                {route.name}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
     </View>
   );
 };
 const styles = StyleSheet.create({
   wrapper: {
     position: 'absolute',
-    bottom: 20,
-    width: width / 1.2,
-    height: 50,
-    backgroundColor: '#e5e5e5',
-    alignSelf: 'center',
+    bottom: 25,
+    width,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  container: {
     borderRadius: 100,
-    paddingVertical: 5,
+    width: width / 1.3,
+    backgroundColor: '#ffffff',
+    paddingVertical: 8,
     justifyContent: 'space-around',
     alignItems: 'center',
     flexDirection: 'row',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
   },
-  container: {},
 });
 
 export default TabBar;
