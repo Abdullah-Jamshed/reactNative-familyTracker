@@ -32,7 +32,23 @@ const GroupDetailScreen = ({navigation}) => {
           </View>
           <Text style={styles.heading}>Groups Details</Text>
         </View>
-        <View style={{marginTop: 20, marginBottom: 190}}>
+        <View style={styles.groupSecretsContainer}>
+          <View style={styles.groupSecrets}>
+            <Text style={styles.secretHeading}>Group id:</Text>
+            <Text>wwsd748vsd7dfs</Text>
+          </View>
+          <View style={styles.groupSecrets}>
+            <Text style={styles.secretHeading}>Group key:</Text>
+            <Text>486486</Text>
+          </View>
+        </View>
+
+        <View style={{marginTop: 0, flex: 1}}>
+          <View style={{padding: 10}}>
+            <Text style={[styles.heading, {fontSize: 16, marginLeft: 0}]}>
+              Groups Memebers:
+            </Text>
+          </View>
           <ScrollView
             contentContainerStyle={{
               flexGrow: 1,
@@ -71,8 +87,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#ffffff',
     alignItems: 'center',
-    // justifyContent: 'center',
-    // paddingTop: 20,
   },
   heading: {
     fontSize: 18,
@@ -97,7 +111,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     backgroundColor: '#ffffff',
     borderRadius: 10,
-    // paddingLeft:5,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -121,6 +134,21 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingVertical: 5,
     justifyContent: 'center',
+  },
+  groupSecretsContainer: {
+    width,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+  },
+  groupSecrets: {
+    flexDirection: 'row',
+    padding: 5,
+    alignItems: 'center',
+  },
+  secretHeading: {
+    fontSize: 15,
+    marginRight: 10,
+    fontWeight: 'bold',
   },
 });
 
