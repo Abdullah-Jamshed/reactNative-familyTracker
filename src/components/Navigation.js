@@ -9,6 +9,7 @@ import HomeScreen from '../screens/HomeScreen';
 import MapScreen from '../screens/MapScreen';
 import GroupScreen from '../screens/GroupScreen';
 import GroupDetailScreen from '../screens/GroupDetailScreen';
+import CreateGroupScreen from '../screens/CreateGroupScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -76,6 +77,7 @@ const Navigation = () => {
         <Stack.Screen name="Group" component={TabBarNav} />
         <Stack.Screen name="Map" component={TabBarNav} />
         <Stack.Screen name="GroupDetail" component={GroupDetailScreen} />
+        <Stack.Screen name="CreateGroup" component={CreateGroupScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

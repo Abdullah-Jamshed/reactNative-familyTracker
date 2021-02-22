@@ -21,19 +21,19 @@ const GroupScreen = ({navigation}) => {
         <View style={styles.headingContainer}>
           <Text style={styles.heading}>Groups</Text>
         </View>
-        <View style={{marginTop:20,marginBottom: 190}}>
+        <View style={{marginTop: 20, marginBottom: 190}}>
           <ScrollView
             contentContainerStyle={{
               flexGrow: 1,
               width,
               paddingVertical: 20,
               paddingHorizontal: 10,
-            //   backgroundColor:"red"
+              //   backgroundColor:"red"
             }}>
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((k, i) => {
               return (
                 <TouchableOpacity
-                onPress={()=>navigation.navigate("GroupDetail")}
+                  onPress={() => navigation.navigate('GroupDetail')}
                   key={i}
                   activeOpacity={1}
                   style={styles.groupContainer}>
@@ -53,7 +53,9 @@ const GroupScreen = ({navigation}) => {
         </View>
 
         <View style={styles.addGroupButtonContainer}>
-          <TouchableOpacity style={styles.addGroupButton}>
+          <TouchableOpacity
+            style={styles.addGroupButton}
+            onPress={() => navigation.navigate('CreateGroup')}>
             <AntDesign name="pluscircleo" size={40} color={'#fe6666'} />
           </TouchableOpacity>
         </View>
