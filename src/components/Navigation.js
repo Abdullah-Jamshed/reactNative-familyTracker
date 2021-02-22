@@ -10,6 +10,7 @@ import MapScreen from '../screens/MapScreen';
 import GroupScreen from '../screens/GroupScreen';
 import GroupDetailScreen from '../screens/GroupDetailScreen';
 import CreateGroupScreen from '../screens/CreateGroupScreen';
+import JoinGroupScreen from '../screens/joinGroupScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -78,6 +79,7 @@ const Navigation = () => {
         <Stack.Screen name="Map" component={TabBarNav} />
         <Stack.Screen name="GroupDetail" component={GroupDetailScreen} />
         <Stack.Screen name="CreateGroup" component={CreateGroupScreen} />
+        <Stack.Screen name="JoinGroup" component={JoinGroupScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
