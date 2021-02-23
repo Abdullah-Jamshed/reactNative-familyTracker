@@ -60,7 +60,6 @@ const Navigation = ({userAuth, userAuthAction}) => {
 
   // Handle user state changes
   function onAuthStateChanged(user) {
-    console.log('User on AuthStateChange ==>>>', user);
     userAuthAction(user);
     if (initializing) setInitializing(false);
   }

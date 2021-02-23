@@ -18,11 +18,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 // Redux
 
 const HomeScreen = ({navigation}) => {
-  
   const signOut = () => {
-    auth()
-      .signOut()
-      .then(() => console.log('User signed out!'));
+    auth().signOut();
   };
 
   return (

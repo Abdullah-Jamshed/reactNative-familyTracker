@@ -41,7 +41,6 @@ const LoginScreen = ({navigation}) => {
         if (error.code === 'auth/wrong-password') {
           setHelperTextPassword('Wrong Password !');
         }
-        console.log(error.code);
       });
   };
 

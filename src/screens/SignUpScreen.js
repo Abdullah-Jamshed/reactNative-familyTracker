@@ -51,7 +51,6 @@ const SignUpScreen = ({navigation, userAuthAction}) => {
             // An error happened.
             // console.log('Update Unsuccessful.', error);
           });
-        console.log('User account created & signed in!');
       })
       .catch((error) => {
         if (error.code === 'auth/email-already-in-use') {
