@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -18,11 +18,13 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 // Redux
 
 const HomeScreen = ({navigation}) => {
+  
   const signOut = () => {
     auth()
       .signOut()
       .then(() => console.log('User signed out!'));
   };
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.container}>
@@ -80,4 +82,15 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+import {connect} from 'react-redux';
+
+const mapStatetoProps = (state) => {
+  return {
+    userAuth: state.homeReducer.userAuth,
+  };
+};
+const mapDispatchtoProps = () => {
+  return {};
+};
+
+export default connect(mapStatetoProps, mapDispatchtoProps)(HomeScreen);

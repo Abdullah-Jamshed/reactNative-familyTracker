@@ -1,7 +1,7 @@
-const viewModeAction = (mode) => {
+const userAuthAction = (userAuth) => {
   return (dispatch) => {
-    dispatch({type: 'CATEGORY_VIEW', payload: {mode}});
+    dispatch({type: 'USERAUTH', payload: {userAuth}});
   };
 };
 
-export {viewModeAction};
+export {userAuthAction};

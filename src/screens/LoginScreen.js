@@ -8,17 +8,30 @@ import {
   Dimensions,
   StyleSheet,
 } from 'react-native';
+
+//redux
 import {connect} from 'react-redux';
+
+// firebase
+import auth from '@react-native-firebase/auth';
 
 // Screen
 //Component
-//
 
 const {width, height} = Dimensions.get('window');
 
 const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const signIn = () => {
+    auth()
+      .signInWithEmailAndPassword(email, password)
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.container}>
@@ -30,20 +43,18 @@ const LoginScreen = ({navigation}) => {
           style={styles.textInput}
           placeholder="Email"
           textContentType="emailAddress"
-          onChangeText={(text) => setEmail(text)}
+          onChangeText={(text) => setEmail(text.trim())}
         />
         <TextInput
           value={password}
           style={styles.textInput}
-          onChangeText={(text) => setPassword(text)}
+          onChangeText={(text) => setPassword(text.trim())}
           placeholder="Password"
           textContentType="password"
           secureTextEntry={true}
         />
         <TouchableOpacity
-          onPress={() => {
-            console.log('Login Button Working...');
-          }}
+          onPress={signIn}
           activeOpacity={0.8}
           style={email && password ? styles.button : styles.disabledButton}
           disabled={!(email && password)}>

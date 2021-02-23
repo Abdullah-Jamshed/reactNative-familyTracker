@@ -14,6 +14,11 @@ import GroupDetailScreen from '../screens/GroupDetailScreen';
 import CreateGroupScreen from '../screens/CreateGroupScreen';
 import JoinGroupScreen from '../screens/joinGroupScreen';
 
+// redux
+import {connect} from 'react-redux';
+// redux store actions
+import {userAuthAction} from '../store/actions/homeActions';
+
 // firebase
 import auth from '@react-native-firebase/auth';
 
@@ -48,14 +53,15 @@ const TabBarNav = () => {
   );
 };
 
-const Navigation = () => {
+const Navigation = ({userAuth, userAuthAction}) => {
   // Set an initializing state whilst Firebase connects
   const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState();
+  // const [user, setUser] = useState();
 
   // Handle user state changes
   function onAuthStateChanged(user) {
-    setUser(user);
+    console.log('User on AuthStateChange ==>>>', user);
+    userAuthAction(user);
     if (initializing) setInitializing(false);
   }
 
@@ -78,7 +84,7 @@ const Navigation = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator headerMode={false}>
-        {!user ? (
+        {!userAuth ? (
           <>
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="SignUp" component={SignUpScreen} />
@@ -107,4 +113,15 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Navigation;
+const mapStatetoProps = (state) => {
+  return {
+    userAuth: state.homeReducer.userAuth,
+  };
+};
+const mapDispatchtoProps = (dispatch) => {
+  return {
+    userAuthAction: (userAuth) => dispatch(userAuthAction(userAuth)),
+  };
+};
+
+export default connect(mapStatetoProps, mapDispatchtoProps)(Navigation);

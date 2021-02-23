@@ -1,13 +1,13 @@
 const INITIAL_STATE = {
-  viewMode: 'chart',
+  userAuth: null,
 };
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case 'CATEGORY_VIEW':
+    case 'USERAUTH':
       return {
         ...state,
-        viewMode: action.payload.mode,
+        userAuth: action.payload.userAuth,
       };
     default:
       return state;

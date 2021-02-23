@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -11,6 +11,8 @@ import {
 
 // Redux
 import {connect} from 'react-redux';
+// redux store actions
+import {userAuthAction} from '../store/actions/homeActions';
 
 // firebase
 import auth from '@react-native-firebase/auth';
@@ -23,7 +25,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const {width, height} = Dimensions.get('window');
 
-const SignUpScreen = ({navigation}) => {
+const SignUpScreen = ({navigation, userAuthAction}) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -36,6 +38,19 @@ const SignUpScreen = ({navigation}) => {
     auth()
       .createUserWithEmailAndPassword(email, password)
       .then(() => {
+        var userUpdate = auth().currentUser;
+        userUpdate
+          .updateProfile({
+            displayName: name,
+          })
+          .then(() => {
+            // Update successful.
+            userAuthAction(auth().currentUser);
+          })
+          .catch((error) => {
+            // An error happened.
+            // console.log('Update Unsuccessful.', error);
+          });
         console.log('User account created & signed in!');
       })
       .catch((error) => {
@@ -77,7 +92,7 @@ const SignUpScreen = ({navigation}) => {
         />
         <TextInput
           value={email}
-          onChangeText={(text) => setEmail(text)}
+          onChangeText={(text) => setEmail(text.trim())}
           style={styles.textInput}
           placeholder="Email"
           textContentType="emailAddress"
@@ -89,7 +104,7 @@ const SignUpScreen = ({navigation}) => {
         </View>
         <TextInput
           value={password}
-          onChangeText={(text) => setPassword(text)}
+          onChangeText={(text) => setPassword(text.trim())}
           style={styles.textInput}
           placeholder="Password"
           textContentType="password"
@@ -191,8 +206,10 @@ const styles = StyleSheet.create({
 const mapStatetoProps = (state) => {
   return {};
 };
-const mapDispatchtoProps = () => {
-  return {};
+const mapDispatchtoProps = (dispatch) => {
+  return {
+    userAuthAction: (userAuth) => dispatch(userAuthAction(userAuth)),
+  };
 };
 
 export default connect(mapStatetoProps, mapDispatchtoProps)(SignUpScreen);
