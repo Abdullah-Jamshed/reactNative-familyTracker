@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import {View, StyleSheet} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -13,8 +14,14 @@ import GroupDetailScreen from '../screens/GroupDetailScreen';
 import CreateGroupScreen from '../screens/CreateGroupScreen';
 import JoinGroupScreen from '../screens/joinGroupScreen';
 
+// firebase
+import auth from '@react-native-firebase/auth';
+
 // component
 import TabBar from './TabBar';
+
+//icons
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -42,13 +49,38 @@ const TabBarNav = () => {
 };
 
 const Navigation = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // Set an initializing state whilst Firebase connects
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState();
+
+  // Handle user state changes
+  function onAuthStateChanged(user) {
+    setUser(user);
+    if (initializing) setInitializing(false);
+  }
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
+
+  if (initializing) {
+    return (
+      <View style={styles.initialLogo}>
+        <MaterialCommunityIcons
+          name="map-marker-multiple-outline"
+          size={100}
+          color="#fe6666"
+        />
+      </View>
+    );
+  }
   return (
     <NavigationContainer>
       <Stack.Navigator headerMode={false}>
-        {!isLoggedIn ? (
+        {!user ? (
           <>
-            <Stack.Screen name="LoginScreen" component={LoginScreen} />
+            <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="SignUp" component={SignUpScreen} />
           </>
         ) : (
@@ -65,5 +97,15 @@ const Navigation = () => {
     </NavigationContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  initialLogo: {
+    flex: 1,
+    backgroundColor: '#ffffff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'red',
+  },
+});
 
 export default Navigation;

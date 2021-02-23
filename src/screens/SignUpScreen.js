@@ -8,14 +8,18 @@ import {
   Dimensions,
   StyleSheet,
 } from 'react-native';
+
+// Redux
 import {connect} from 'react-redux';
+
+// firebase
+import auth from '@react-native-firebase/auth';
 
 // icons
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // Screen
 // Component
-// Redux
 
 const {width, height} = Dimensions.get('window');
 
@@ -23,6 +27,25 @@ const SignUpScreen = ({navigation}) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [helperTextEmail, setHelperTextEmail] = useState('');
+
+  const SignUp = () => {
+    auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        console.log('User account created & signed in!');
+      })
+      .catch((error) => {
+        if (error.code === 'auth/email-already-in-use') {
+          setHelperTextEmail('That email address is already in use!');
+        }
+
+        if (error.code === 'auth/invalid-email') {
+          setHelperTextEmail('That email address is invalid!');
+        }
+        console.error(error);
+      });
+  };
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -54,6 +77,9 @@ const SignUpScreen = ({navigation}) => {
           placeholder="Email"
           textContentType="emailAddress"
         />
+        <View style={styles.helperText}>
+          {helperTextEmail && <Text>{helperTextEmail}</Text>}
+        </View>
         <TextInput
           value={password}
           onChangeText={(text) => setPassword(text)}
@@ -63,9 +89,7 @@ const SignUpScreen = ({navigation}) => {
           secureTextEntry={true}
         />
         <TouchableOpacity
-          onPress={() => {
-            console.log('signUp Button Working...');
-          }}
+          onPress={SignUp}
           activeOpacity={0.8}
           style={
             name && email && password ? styles.button : styles.disabledButton
@@ -143,6 +167,8 @@ const styles = StyleSheet.create({
     color: '#586069',
     fontSize: 15,
   },
+  helperTextContainer: {},
+  helperText: {},
 });
 
 const mapStatetoProps = (state) => {

@@ -1,27 +1,52 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {Provider} from 'react-redux';
-import store from './src/store';
-// Screen
-import LoginScreen from './src/screens/LoginScreen';
-import SignUpScreen from './src/screens/SignUpScreen';
-import HomeScreen from './src/screens/HomeScreen';
-import MapScreen from './src/screens/MapScreen';
 
-import Navigation from './src/components/Navigation';
+// // firebase
+// import auth from '@react-native-firebase/auth';
 
 //Component
+import Navigation from './src/components/Navigation';
+
 // Redux
+import store from './src/store';
+
+//icons
+// import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const App = () => {
+
+  // // Set an initializing state whilst Firebase connects
+  // const [initializing, setInitializing] = useState(true);
+  // const [user, setUser] = useState();
+
+  // // Handle user state changes
+  // function onAuthStateChanged(user) {
+  //   setUser(user);
+  //   if (initializing) setInitializing(false);
+  // }
+
+  // useEffect(() => {
+  //   const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+  //   return subscriber; // unsubscribe on unmount
+  // }, []);
+
+  // if (initializing) {
+  //   return (
+  //     <View style={styles.initialLogo}>
+  //       <MaterialCommunityIcons
+  //         name="map-marker-multiple-outline"
+  //         size={100}
+  //         color="#fe6666"
+  //       />
+  //     </View>
+  //   );
+  // }
+
   return (
     <Provider store={store}>
       <SafeAreaView style={{flex: 1}}>
         <View style={styles.container}>
-          {/* <LoginScreen /> */}
-          {/* <SignUpScreen /> */}
-          {/* <MapScreen /> */}
-          {/* <HomeScreen /> */}
           <Navigation />
         </View>
       </SafeAreaView>
@@ -34,6 +59,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#ffffff',
   },
+  // initialLogo: {
+  //   flex: 1,
+  //   backgroundColor: '#ffffff',
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  // },
 });
 
 export default App;
