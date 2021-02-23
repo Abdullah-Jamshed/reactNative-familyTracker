@@ -13,6 +13,7 @@ import GroupScreen from '../screens/GroupScreen';
 import GroupDetailScreen from '../screens/GroupDetailScreen';
 import CreateGroupScreen from '../screens/CreateGroupScreen';
 import JoinGroupScreen from '../screens/joinGroupScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 
 // redux
 import {connect} from 'react-redux';
@@ -48,6 +49,11 @@ const TabBarNav = () => {
         name="Map"
         component={MapScreen}
         initialParams={{icon: 'enviromento'}}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        initialParams={{icon: 'user'}}
       />
     </Tab.Navigator>
   );

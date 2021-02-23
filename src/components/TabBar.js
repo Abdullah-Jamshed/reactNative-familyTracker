@@ -57,9 +57,10 @@ const styles = StyleSheet.create({
   },
   container: {
     borderRadius: 100,
-    width: width / 1.3,
+    width: width / 1.2,
     backgroundColor: '#ffffff',
     paddingVertical: 8,
+    paddingHorizontal: 10,
     justifyContent: 'space-around',
     alignItems: 'center',
     flexDirection: 'row',
