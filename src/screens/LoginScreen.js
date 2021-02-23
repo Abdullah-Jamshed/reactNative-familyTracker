@@ -16,7 +16,7 @@ import {connect} from 'react-redux';
 
 const {width, height} = Dimensions.get('window');
 
-const LoginScreen = () => {
+const LoginScreen = ({navigation}) => {
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.container}>
@@ -47,7 +47,9 @@ const LoginScreen = () => {
         </View>
         <View style={styles.signUp}>
           <Text>Don't Have account?</Text>
-          <TouchableOpacity activeOpacity={0.8}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate('SignUp')}>
             <Text style={[styles.buttonText, {color: 'red', marginLeft: 5}]}>
               Sign Up
             </Text>

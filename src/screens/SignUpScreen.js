@@ -19,11 +19,14 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const {width, height} = Dimensions.get('window');
 
-const SignUpScreen = () => {
+const SignUpScreen = ({navigation}) => {
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.container}>
-        <TouchableOpacity activeOpacity={0.8} style={styles.backButton}>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}>
           <Ionicons
             name="chevron-back"
             size={30}

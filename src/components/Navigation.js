@@ -1,10 +1,11 @@
-import React from 'react';
-import {Group, View} from 'react-native';
+import React, {useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import TabBar from './TabBar';
+// Screens
+import LoginScreen from '../screens/LoginScreen';
+import SignUpScreen from '../screens/SignUpScreen';
 import HomeScreen from '../screens/HomeScreen';
 import MapScreen from '../screens/MapScreen';
 import GroupScreen from '../screens/GroupScreen';
@@ -12,41 +13,11 @@ import GroupDetailScreen from '../screens/GroupDetailScreen';
 import CreateGroupScreen from '../screens/CreateGroupScreen';
 import JoinGroupScreen from '../screens/joinGroupScreen';
 
+// component
+import TabBar from './TabBar';
+
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
-
-// const GroupStack = () => {
-//   return (
-//     <Stack.Navigator headerMode={false}>
-//       <Stack.Screen name="GroupStack" component={GroupScreen} />
-//       <Stack.Screen name="GroupDetailStack" component={GroupDetailScreen} />
-//     </Stack.Navigator>
-//   );
-// };
-
-// const Navigation = () => {
-//   return (
-//     <NavigationContainer>
-//       <Tab.Navigator tabBar={(props) => <TabBar {...props} />}>
-//         <Tab.Screen
-//           name="Home"
-//           component={HomeScreen}
-//           initialParams={{icon: 'home'}}
-//         />
-//         <Tab.Screen
-//           name="Groups"
-//           component={GroupStack}
-//           initialParams={{icon: 'addusergroup'}}
-//         />
-//         <Tab.Screen
-//           name="Map"
-//           component={MapScreen}
-//           initialParams={{icon: 'enviromento'}}
-//         />
-//       </Tab.Navigator>
-//     </NavigationContainer>
-//   );
-// };
 
 const TabBarNav = () => {
   return (
@@ -71,15 +42,25 @@ const TabBarNav = () => {
 };
 
 const Navigation = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   return (
     <NavigationContainer>
       <Stack.Navigator headerMode={false}>
-        <Stack.Screen name="Home" component={TabBarNav} />
-        <Stack.Screen name="Group" component={TabBarNav} />
-        <Stack.Screen name="Map" component={TabBarNav} />
-        <Stack.Screen name="GroupDetail" component={GroupDetailScreen} />
-        <Stack.Screen name="CreateGroup" component={CreateGroupScreen} />
-        <Stack.Screen name="JoinGroup" component={JoinGroupScreen} />
+        {!isLoggedIn ? (
+          <>
+            <Stack.Screen name="LoginScreen" component={LoginScreen} />
+            <Stack.Screen name="SignUp" component={SignUpScreen} />
+          </>
+        ) : (
+          <>
+            <Stack.Screen name="Home" component={TabBarNav} />
+            <Stack.Screen name="Group" component={TabBarNav} />
+            <Stack.Screen name="Map" component={TabBarNav} />
+            <Stack.Screen name="GroupDetail" component={GroupDetailScreen} />
+            <Stack.Screen name="CreateGroup" component={CreateGroupScreen} />
+            <Stack.Screen name="JoinGroup" component={JoinGroupScreen} />
+          </>
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );
