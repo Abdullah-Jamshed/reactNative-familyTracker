@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
   },
   disabledButtonText: {
     fontSize: 15,
-    color: '#000',
+    color: '#586069',
     fontWeight: 'bold',
   },
 });

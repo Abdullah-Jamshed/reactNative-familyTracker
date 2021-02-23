@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -20,6 +20,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 const {width, height} = Dimensions.get('window');
 
 const SignUpScreen = ({navigation}) => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.container}>
@@ -37,23 +41,44 @@ const SignUpScreen = ({navigation}) => {
           <Text style={styles.headingText}>Family Tracker</Text>
         </View>
         <TextInput
+          value={name}
+          onChangeText={(text) => setName(text)}
           style={styles.textInput}
           placeholder="Name"
           textContentType="name"
         />
         <TextInput
+          value={email}
+          onChangeText={(text) => setEmail(text)}
           style={styles.textInput}
           placeholder="Email"
           textContentType="emailAddress"
         />
         <TextInput
+          value={password}
+          onChangeText={(text) => setPassword(text)}
           style={styles.textInput}
           placeholder="Password"
           textContentType="password"
           secureTextEntry={true}
         />
-        <TouchableOpacity style={styles.button} activeOpacity={0.8}>
-          <Text style={styles.buttonText}>Sign Up</Text>
+        <TouchableOpacity
+          onPress={() => {
+            console.log('signUp Button Working...');
+          }}
+          activeOpacity={0.8}
+          style={
+            name && email && password ? styles.button : styles.disabledButton
+          }
+          disabled={!(name && email && password)}>
+          <Text
+            style={
+              name && email && password
+                ? styles.buttonText
+                : styles.disabledButtonText
+            }>
+            Sign Up
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -74,18 +99,18 @@ const styles = StyleSheet.create({
   headingText: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: 'red',
+    color: '#fe6666',
   },
   textInput: {
     borderBottomWidth: 1.5,
-    borderBottomColor: 'red',
+    borderBottomColor: '#fe6666',
     width: width / 1.3,
     paddingVertical: 5,
     paddingHorizontal: 5,
     marginVertical: 10,
   },
   button: {
-    backgroundColor: 'red',
+    backgroundColor: '#fe6666',
     width: width / 1.3,
     padding: 10,
     justifyContent: 'center',
@@ -103,7 +128,20 @@ const styles = StyleSheet.create({
     left: 20,
   },
   backButtonIcons: {
-    color: 'red',
+    color: '#fe6666',
+  },
+  disabledButton: {
+    backgroundColor: '#e6e6e6',
+    width: width / 1.3,
+    padding: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  disabledButtonText: {
+    fontWeight: 'bold',
+    color: '#586069',
+    fontSize: 15,
   },
 });
 
