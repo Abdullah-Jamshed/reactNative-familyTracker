@@ -28,8 +28,11 @@ const SignUpScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [helperTextEmail, setHelperTextEmail] = useState('');
+  const [helperTextPassword, setHelperTextPassword] = useState('');
 
   const SignUp = () => {
+    helperTextEmail && setHelperTextEmail('');
+    helperTextPassword && setHelperTextPassword('');
     auth()
       .createUserWithEmailAndPassword(email, password)
       .then(() => {
@@ -43,7 +46,9 @@ const SignUpScreen = ({navigation}) => {
         if (error.code === 'auth/invalid-email') {
           setHelperTextEmail('That email address is invalid!');
         }
-        console.error(error);
+        if (error.code === 'auth/weak-password') {
+          setHelperTextPassword('Password should have at least 6 characters');
+        }
       });
   };
 
@@ -77,8 +82,10 @@ const SignUpScreen = ({navigation}) => {
           placeholder="Email"
           textContentType="emailAddress"
         />
-        <View style={styles.helperText}>
-          {helperTextEmail && <Text>{helperTextEmail}</Text>}
+        <View style={styles.helperTextContainer}>
+          {helperTextEmail !== '' && (
+            <Text style={styles.helperText}>{helperTextEmail}</Text>
+          )}
         </View>
         <TextInput
           value={password}
@@ -88,6 +95,11 @@ const SignUpScreen = ({navigation}) => {
           textContentType="password"
           secureTextEntry={true}
         />
+        <View style={styles.helperTextContainer}>
+          {helperTextPassword !== '' && (
+            <Text style={styles.helperText}>{helperTextPassword}</Text>
+          )}
+        </View>
         <TouchableOpacity
           onPress={SignUp}
           activeOpacity={0.8}
@@ -167,8 +179,13 @@ const styles = StyleSheet.create({
     color: '#586069',
     fontSize: 15,
   },
-  helperTextContainer: {},
-  helperText: {},
+  helperTextContainer: {
+    width: width / 1.3,
+  },
+  helperText: {
+    fontSize: 12,
+    color: '#fe6666',
+  },
 });
 
 const mapStatetoProps = (state) => {

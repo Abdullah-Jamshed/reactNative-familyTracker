@@ -7,6 +7,9 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+// firebasee
+import auth from '@react-native-firebase/auth';
+
 // icons
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -15,6 +18,11 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 // Redux
 
 const HomeScreen = ({navigation}) => {
+  const signOut = () => {
+    auth()
+      .signOut()
+      .then(() => console.log('User signed out!'));
+  };
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.container}>
@@ -29,6 +37,11 @@ const HomeScreen = ({navigation}) => {
             onPress={() => navigation.navigate('JoinGroup')}
             style={styles.button}>
             <Text style={styles.buttonText}>Join Group</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={signOut}
+            style={[styles.button, {marginTop: 10}]}>
+            <Text style={styles.buttonText}>Sign Out</Text>
           </TouchableOpacity>
         </View>
       </View>
