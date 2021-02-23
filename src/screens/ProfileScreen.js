@@ -7,8 +7,9 @@ import {
   Text,
   Dimensions,
   Image,
-  TouchableOpacity,
+  //   TouchableOpacity,
 } from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 // Redux
 import {connect} from 'react-redux';
@@ -18,7 +19,7 @@ import auth from '@react-native-firebase/auth';
 
 // icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
-// import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const {width, height} = Dimensions.get('window');
 
@@ -31,20 +32,47 @@ const ProfileScreen = ({navigation, userAuth}) => {
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.container}>
         <View style={styles.photoContainer}>
-          {userAuth.photoURL ? (
-            <Image
-              reqiure={{uri: userAuth.photoURL}}
-              style={styles.imageStyle}
-            />
-          ) : (
-            <View style={styles.photoCircle}>
-              <AntDesign name="user" size={60} color={'#c4c4c4'} />
+          <View style={styles.photoCircle}>
+            {userAuth.photoURL ? (
+              <Image
+                reqiure={{uri: userAuth.photoURL}}
+                style={styles.imageStyle}
+              />
+            ) : (
+              <View style={styles.defaultImage}>
+                <AntDesign name="user" size={60} color={'#c4c4c4'} />
+              </View>
+            )}
+            <View style={styles.editButtonContainer}>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => {
+                  console.log('Edit button');
+                }}
+                style={styles.editButton}>
+                <MaterialCommunityIcons
+                  name="pencil"
+                  size={20}
+                  color={'#fff'}
+                />
+              </TouchableOpacity>
             </View>
-          )}
+          </View>
         </View>
-        <View style={styles.userDetail}>
+        <View style={styles.userDetailWrapper}>
+          <View style={styles.userDetailContainer}>
+            <View style={styles.userDetail}>
+              <Text style={styles.userDetailLabel}>Name :</Text>
+              <Text style={styles.userDetailValue}>{userAuth.displayName}</Text>
+            </View>
+            <View style={styles.userDetail}>
+              <Text style={styles.userDetailLabel}>Email :</Text>
+              <Text style={styles.userDetailValue}>{userAuth.email}</Text>
+            </View>
+          </View>
+
           <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={signOut} style={[styles.button]}>
+            <TouchableOpacity onPress={signOut} style={styles.button}>
               <Text style={styles.buttonText}>Sign Out</Text>
             </TouchableOpacity>
           </View>
@@ -100,12 +128,42 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  userDetailWrapper: {
+    paddingVertical: 20,
+  },
+  userDetailContainer: {
+    paddingTop: 10,
+    paddingBottom: 20,
+    paddingHorizontal: 20,
+  },
   userDetail: {
-    backgroundColor: 'red',
+    flexDirection: 'row',
+    paddingVertical: 5,
   },
   imageStyle: {
     width: 100,
     height: 100,
+  },
+  userDetailLabel: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    paddingRight: 10,
+  },
+  userDetailValue: {},
+  defaultImage: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  editButtonContainer: {
+    zIndex: 10,
+    position: 'absolute',
+    right: 0,
+    bottom: 0,
+  },
+  editButton: {
+    padding: 5,
+    backgroundColor: '#586069',
+    borderRadius: 100,
   },
 });
 
