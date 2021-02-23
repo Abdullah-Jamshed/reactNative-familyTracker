@@ -23,12 +23,25 @@ const {width, height} = Dimensions.get('window');
 const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [helperTextEmail, setHelperTextEmail] = useState('');
+  const [helperTextPassword, setHelperTextPassword] = useState('');
 
   const signIn = () => {
+    helperTextEmail && setHelperTextEmail('');
+    helperTextPassword && setHelperTextPassword('');
     auth()
       .signInWithEmailAndPassword(email, password)
       .catch((error) => {
-        console.log(error);
+        if (error.code === 'auth/invalid-email') {
+          setHelperTextEmail('Invalid Email address !');
+        }
+        if (error.code === 'auth/user-not-found') {
+          setHelperTextEmail('User Not found !');
+        }
+        if (error.code === 'auth/wrong-password') {
+          setHelperTextPassword('Wrong Password !');
+        }
+        console.log(error.code);
       });
   };
 
@@ -45,6 +58,11 @@ const LoginScreen = ({navigation}) => {
           textContentType="emailAddress"
           onChangeText={(text) => setEmail(text.trim())}
         />
+        {helperTextEmail !== '' && (
+          <View style={styles.helperTextContainer}>
+            <Text style={styles.helperText}>{helperTextEmail}</Text>
+          </View>
+        )}
         <TextInput
           value={password}
           style={styles.textInput}
@@ -53,6 +71,11 @@ const LoginScreen = ({navigation}) => {
           textContentType="password"
           secureTextEntry={true}
         />
+        {helperTextPassword !== '' && (
+          <View style={styles.helperTextContainer}>
+            <Text style={styles.helperText}>{helperTextPassword}</Text>
+          </View>
+        )}
         <TouchableOpacity
           onPress={signIn}
           activeOpacity={0.8}
@@ -150,6 +173,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#586069',
     fontSize: 15,
+  },
+  helperTextContainer: {
+    width: width / 1.3,
+  },
+  helperText: {
+    fontSize: 12,
+    color: '#fe6666',
   },
 });
 
