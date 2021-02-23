@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "337792223117",
+    "project_id": "reactnative-familytracker",
+    "storage_bucket": "reactnative-familytracker.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:337792223117:android:b610ae2b39b5eb9817dfc4",
+        "android_client_info": {
+          "package_name": "com.family"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "337792223117-630sj3u9r7bkrdn479o47i0h585sdmen.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBva2l0l8_GLApiZUWIa8WtQ10oplCRTjA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "337792223117-630sj3u9r7bkrdn479o47i0h585sdmen.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
