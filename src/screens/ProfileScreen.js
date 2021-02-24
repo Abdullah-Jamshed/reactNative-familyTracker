@@ -7,15 +7,17 @@ import {
   Text,
   Dimensions,
   Image,
-  //   TouchableOpacity,
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 // Redux
 import {connect} from 'react-redux';
 
 // firebasee
 import auth from '@react-native-firebase/auth';
+import storage from '@react-native-firebase/storage';
 
 // icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -24,6 +26,19 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 const {width, height} = Dimensions.get('window');
 
 const ProfileScreen = ({navigation, userAuth}) => {
+  const options = {
+    mediaType: 'photo',
+    includeBase64: false,
+    maxHeight: 200,
+    maxWidth: 200,
+  };
+
+  const imagePicker = () => {
+    launchImageLibrary(options, (response) => {
+      console.log(response);
+    });
+  };
+
   const signOut = () => {
     auth().signOut();
   };
@@ -46,9 +61,7 @@ const ProfileScreen = ({navigation, userAuth}) => {
             <View style={styles.editButtonContainer}>
               <TouchableOpacity
                 activeOpacity={0.7}
-                onPress={() => {
-                  console.log('Edit button');
-                }}
+                onPress={imagePicker}
                 style={styles.editButton}>
                 <MaterialCommunityIcons
                   name="pencil"
