@@ -91,7 +91,7 @@ const UpdateScreen = ({navigation, userAuth, userAuthAction}) => {
             })
             .catch((error) => {
               // An error happened.
-              // console.log('Update Unsuccessful.', error);
+              console.log('Update Unsuccessful.', error);
             });
         });
       } catch (e) {
