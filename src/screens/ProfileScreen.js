@@ -86,7 +86,6 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     alignItems: 'center',
-    // marginTop: 20,
   },
   button: {
     backgroundColor: '#fe6666',
@@ -138,7 +137,6 @@ const styles = StyleSheet.create({
   userDetailLabel: {
     fontSize: 16,
     fontWeight: 'bold',
-    // paddingRight: 10,
     width: 70,
   },
   defaultImage: {
