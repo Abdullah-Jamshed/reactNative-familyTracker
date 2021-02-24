@@ -63,37 +63,40 @@ const UpdateScreen = ({navigation, userAuth, userAuthAction}) => {
   };
 
   const uploadImage = async () => {
-    setLoader(true);
-    const {uri} = image;
-    const filename = uri.substring(uri.lastIndexOf('/') + 1);
-    const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
-    const task = storage()
-      .ref(`${userAuth.uid}/images/${filename}`)
-      .putFile(uploadUri);
+    if (image) {
+      setLoader(true);
+      const {uri} = image;
+      // const filename = uri.substring(uri.lastIndexOf('/') + 1); // file name from uri storage().ref(`${userAuth.uid}/images/${filename}`)
+      const uploadUri =
+        Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
+      const task = storage()
+        .ref(`/images/${userAuth.uid}/profilePicture.jpg`)
+        .putFile(uploadUri);
 
-    try {
-      await task.then(async () => {
-        const url = await storage()
-          .ref(`${userAuth.uid}/images/${filename}`)
-          .getDownloadURL();
-        const userUpdate = auth().currentUser;
-        userUpdate
-          .updateProfile({
-            photoURL: url,
-          })
-          .then(() => {
-            userAuthAction(auth().currentUser);
-            setImage(null);
-            setLoader(false);
-            navigation.goBack();
-          })
-          .catch((error) => {
-            // An error happened.
-            console.log('Update Unsuccessful.', error);
-          });
-      });
-    } catch (e) {
-      console.error(e);
+      try {
+        await task.then(async () => {
+          const url = await storage()
+            .ref(`images/${userAuth.uid}/profilePicture.jpg`)
+            .getDownloadURL();
+          const userUpdate = auth().currentUser;
+          userUpdate
+            .updateProfile({
+              photoURL: url,
+            })
+            .then(() => {
+              userAuthAction(auth().currentUser);
+              setImage(null);
+              setLoader(false);
+              navigation.goBack();
+            })
+            .catch((error) => {
+              // An error happened.
+              console.log('Update Unsuccessful.', error);
+            });
+        });
+      } catch (e) {
+        console.error(e);
+      }
     }
   };
 
@@ -114,7 +117,7 @@ const UpdateScreen = ({navigation, userAuth, userAuthAction}) => {
             }}
           />
         </View>
-        <Text style={styles.heading}>Upload Image</Text>
+        <Text style={styles.heading}>Update Image</Text>
       </View>
       <View>
         <View style={styles.photoContainer}>
@@ -143,6 +146,7 @@ const UpdateScreen = ({navigation, userAuth, userAuthAction}) => {
 
           <View>
             <TouchableOpacity
+            disabled={!image}
               style={
                 image
                   ? [styles.button, {flexDirection: 'row'}]
@@ -151,7 +155,7 @@ const UpdateScreen = ({navigation, userAuth, userAuthAction}) => {
               onPress={uploadImage}>
               <Text
                 style={image ? styles.buttonText : styles.disabledButtonText}>
-                Upload Image
+                Update Image
               </Text>
               <View>
                 {loader && (
