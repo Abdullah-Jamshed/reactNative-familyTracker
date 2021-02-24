@@ -10,14 +10,11 @@ import {
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-
 // Redux
 import {connect} from 'react-redux';
 
 // firebasee
 import auth from '@react-native-firebase/auth';
-import storage from '@react-native-firebase/storage';
 
 // icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -26,19 +23,6 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 const {width, height} = Dimensions.get('window');
 
 const ProfileScreen = ({navigation, userAuth}) => {
-  const options = {
-    mediaType: 'photo',
-    includeBase64: false,
-    maxHeight: 200,
-    maxWidth: 200,
-  };
-
-  const imagePicker = () => {
-    launchImageLibrary(options, (response) => {
-      console.log(response);
-    });
-  };
-
   const signOut = () => {
     auth().signOut();
   };
@@ -50,7 +34,7 @@ const ProfileScreen = ({navigation, userAuth}) => {
           <View style={styles.photoCircle}>
             {userAuth.photoURL ? (
               <Image
-                reqiure={{uri: userAuth.photoURL}}
+                source={{uri: userAuth.photoURL}}
                 style={styles.imageStyle}
               />
             ) : (
@@ -61,7 +45,7 @@ const ProfileScreen = ({navigation, userAuth}) => {
             <View style={styles.editButtonContainer}>
               <TouchableOpacity
                 activeOpacity={0.7}
-                onPress={imagePicker}
+                onPress={() => navigation.navigate('Update')}
                 style={styles.editButton}>
                 <MaterialCommunityIcons
                   name="pencil"
@@ -115,13 +99,6 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontWeight: 'bold',
   },
-  heading: {
-    position: 'absolute',
-    top: 50,
-    fontSize: 20,
-    color: '#fe6666',
-    fontWeight: 'bold',
-  },
   photoContainer: {
     width,
     backgroundColor: '#fe6666',
@@ -132,8 +109,8 @@ const styles = StyleSheet.create({
   photoCircle: {
     position: 'relative',
     top: 50,
-    width: 100,
-    height: 100,
+    width: 106,
+    height: 106,
     backgroundColor: '#f6f6f6',
     borderRadius: 100,
     borderWidth: 5,
@@ -156,13 +133,14 @@ const styles = StyleSheet.create({
   imageStyle: {
     width: 100,
     height: 100,
+    borderRadius: 100,
   },
   userDetailLabel: {
     fontSize: 16,
     fontWeight: 'bold',
-    paddingRight: 10,
+    // paddingRight: 10,
+    width: 70,
   },
-  userDetailValue: {},
   defaultImage: {
     justifyContent: 'center',
     alignItems: 'center',

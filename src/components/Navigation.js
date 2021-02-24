@@ -28,6 +28,7 @@ import TabBar from './TabBar';
 
 //icons
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import UpdateScreen from '../screens/UpdateScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -102,6 +103,7 @@ const Navigation = ({userAuth, userAuthAction}) => {
             <Stack.Screen name="GroupDetail" component={GroupDetailScreen} />
             <Stack.Screen name="CreateGroup" component={CreateGroupScreen} />
             <Stack.Screen name="JoinGroup" component={JoinGroupScreen} />
+            <Stack.Screen name="Update" component={UpdateScreen} />
           </>
         )}
       </Stack.Navigator>
