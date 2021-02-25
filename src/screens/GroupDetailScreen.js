@@ -64,11 +64,9 @@ const GroupDetailScreen = ({navigation, groupDetail, setGroupDetail}) => {
                   width,
                   paddingVertical: 20,
                   alignItems: 'center',
-                  // paddingHorizontal: 10,
                 }}>
                 {groupDetail.members.length !== 0 ? (
-                  //  groupDetail.members.map((k, i) => {
-                  [1, 3, 5].map((member, i) => {
+                  groupDetail.members.map((member, i) => {
                     return (
                       <TouchableOpacity
                         key={i}
