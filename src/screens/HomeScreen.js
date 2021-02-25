@@ -7,6 +7,9 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+// firebase
+import firestore from '@react-native-firebase/firestore';
+
 // icons
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -14,7 +17,21 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 //Component
 // Redux
 
-const HomeScreen = ({navigation}) => {
+const HomeScreen = ({navigation, userAuth}) => {
+  const createUser = async () => {
+    const userUID = userAuth.uid;
+    const respone = await firestore().collection('users').doc(userUID).get();
+    if (!respone.exists) {
+      firestore().collection('users').doc(userUID).set({
+        userUID: userAuth.uid,
+      });
+    }
+  };
+
+  useEffect(() => {
+    createUser();
+  }, []);
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.container}>

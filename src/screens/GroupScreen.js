@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -9,12 +9,30 @@ import {
   Dimensions,
 } from 'react-native';
 
+// firebase
+import firestore from '@react-native-firebase/firestore';
+
 // Icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const {width, height} = Dimensions.get('window');
 
 const GroupScreen = ({navigation}) => {
+  const [groups, setGroups] = useState([]);
+  const store = async () => {
+    const groupsRef = await firestore().collection('groups').get();
+    console.log('groupsRef ==>>', groupsRef);
+
+    // const groups = await (await firestore().collection('groups').doc('groupid').get()).data();
+    const groups = await firestore().collection('groups').doc('groupid').get();
+
+    console.log('groups ==>>', groups.data());
+  };
+
+  useEffect(() => {
+    store();
+  }, []);
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.container}>

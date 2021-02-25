@@ -7,17 +7,25 @@ import {
   Dimensions,
   StyleSheet,
 } from 'react-native';
+
+// redux
+import {connect} from 'react-redux';
+
+// icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
+
+// firebase
+import firestore from '@react-native-firebase/firestore';
 
 const {width, height} = Dimensions.get('window');
 
-const CreateGroupScreen = ({navigation}) => {
+const CreateGroupScreen = ({navigation, userAuth}) => {
   const [groupName, setGroupName] = useState('');
   const [id, setId] = useState('');
   const [key, setKey] = useState('');
 
   const makeid = () => {
-    const length = 10;
+    const length = 4;
     let result = '';
     const characters =
       'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -27,6 +35,39 @@ const CreateGroupScreen = ({navigation}) => {
     }
     setId(result);
   };
+
+  const createGroup = () => {
+    firestore()
+      .collection('groups')
+      .doc(id)
+      .set({
+        adminUID: userAuth.uid,
+        groupId: id,
+        groupName: groupName,
+        groupKey: key,
+        members: [],
+      })
+      .then(() => {
+        firestore()
+          .collection('users')
+          .doc(userAuth.uid)
+          .update({
+            groupsJoined: firestore.FieldValue.arrayUnion(id),
+          });
+        navigation.goBack();
+        // console.log('Doc successful');
+      })
+      .catch((error) => {
+        console.error('Error writing doc', error);
+      });
+  };
+
+  // members: {
+  //   0: {
+  //     uid: '4da86d4a6s',
+  //     name: 'Member Name',
+  //   },
+  // },
 
   useEffect(() => {
     makeid();
@@ -81,9 +122,7 @@ const CreateGroupScreen = ({navigation}) => {
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
-          onPress={() => {
-            console.log('button works...');
-          }}
+          onPress={createGroup}
           style={groupName && key ? styles.button : styles.disabledButton}
           disabled={!(groupName && key)}>
           <Text
@@ -158,4 +197,13 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateGroupScreen;
+const mapStatetoProps = (state) => {
+  return {
+    userAuth: state.homeReducer.userAuth,
+  };
+};
+const mapDispatchtoProps = (dispatch) => {
+  return {};
+};
+
+export default connect(mapStatetoProps, mapDispatchtoProps)(CreateGroupScreen);
