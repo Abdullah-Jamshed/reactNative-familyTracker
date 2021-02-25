@@ -37,15 +37,21 @@ const CreateGroupScreen = ({navigation, userAuth}) => {
   };
 
   const createGroup = () => {
+    const userUID = userAuth.uid;
     firestore()
       .collection('groups')
       .doc(id)
       .set({
-        adminUID: userAuth.uid,
+        adminUID: userUID,
         groupId: id,
         groupName: groupName,
         groupKey: key,
-        members: [],
+        members: [
+          {
+            userUID,
+            name: userAuth.displayName,
+          },
+        ],
       })
       .then(() => {
         firestore()

@@ -82,7 +82,7 @@ const GroupDetailScreen = ({navigation, groupDetail, setGroupDetail}) => {
                           </View>
                           <View style={styles.groupDetail}>
                             <Text style={{fontSize: 15}}>{member.name}</Text>
-                            {member.uid === groupDetail.adminUID && (
+                            {member.userUID === groupDetail.adminUID && (
                               <Text style={styles.badge}>admin</Text>
                             )}
                           </View>
