@@ -9,6 +9,10 @@ import {
   Dimensions,
 } from 'react-native';
 
+//redux
+import {connect} from 'react-redux';
+import {setGroupDetail} from '../store/actions/homeActions';
+
 // firebase
 import firestore from '@react-native-firebase/firestore';
 
@@ -17,16 +21,30 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const {width, height} = Dimensions.get('window');
 
-const GroupScreen = ({navigation}) => {
+const GroupScreen = ({navigation, userAuth,setGroupDetail}) => {
   const [groups, setGroups] = useState([]);
+
+  const userUID = userAuth.uid;
+
   const store = async () => {
-    const groupsRef = await firestore().collection('groups').get();
-    console.log('groupsRef ==>>', groupsRef);
+    const groupsId = await (
+      await firestore().collection('users').doc(`${userUID}`).get()
+    ).data().groupsJoined;
 
+    const groupObj = await firestore()
+      .collection('groups')
+      .where('groupId', 'in', groupsId)
+      .get();
+
+    // console.log(groupObj.docs);
+    setGroups(groupObj.docs);
+
+    // groupObj.docs.forEach((doc) => doc.data()));
+
+    // setGroups(groupsId);
     // const groups = await (await firestore().collection('groups').doc('groupid').get()).data();
-    const groups = await firestore().collection('groups').doc('groupid').get();
-
-    console.log('groups ==>>', groups.data());
+    // const groups = await firestore().collection('groups').doc('groupid').get();
+    // console.log('groups ==>>', groups.data());
   };
 
   useEffect(() => {
@@ -48,25 +66,32 @@ const GroupScreen = ({navigation}) => {
               paddingHorizontal: 10,
               //   backgroundColor:"red"
             }}>
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((k, i) => {
-              return (
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('GroupDetail')}
-                  key={i}
-                  activeOpacity={1}
-                  style={styles.groupContainer}>
-                  <View style={{flexDirection: 'row'}}>
-                    <View style={styles.groupImage}>
-                      <AntDesign name="user" size={40} color={'#e6e6e6'} />
+            {groups !== 0 &&
+              groups.map((groupVal, i) => {
+                const group = groupVal.data();
+                return (
+                  <TouchableOpacity
+                    onPress={() => {
+                      setGroupDetail(group)
+                      navigation.navigate('GroupDetail');
+                    }}
+                    key={i}
+                    activeOpacity={1}
+                    style={styles.groupContainer}>
+                    <View style={{flexDirection: 'row'}}>
+                      <View style={styles.groupImage}>
+                        <AntDesign name="user" size={40} color={'#e6e6e6'} />
+                      </View>
+                      <View style={styles.groupDetail}>
+                        <Text>{group.groupName}</Text>
+                        <Text style={{fontSize: 12}}>
+                          {group.members.length} memebers
+                        </Text>
+                      </View>
                     </View>
-                    <View style={styles.groupDetail}>
-                      <Text>Group Name</Text>
-                      <Text style={{fontSize: 12}}>5 memebers</Text>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              );
-            })}
+                  </TouchableOpacity>
+                );
+              })}
           </ScrollView>
         </View>
 
@@ -138,4 +163,15 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GroupScreen;
+const mapStatetoProps = (state) => {
+  return {
+    userAuth: state.homeReducer.userAuth,
+  };
+};
+const mapDispatchtoProps = (dispatch) => {
+  return {
+    setGroupDetail: (groupDetail) => dispatch(setGroupDetail(groupDetail))
+  };
+};
+
+export default connect(mapStatetoProps, mapDispatchtoProps)(GroupScreen);

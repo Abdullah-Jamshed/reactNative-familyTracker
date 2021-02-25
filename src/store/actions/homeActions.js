@@ -3,5 +3,10 @@ const userAuthAction = (userAuth) => {
     dispatch({type: 'USERAUTH', payload: {userAuth}});
   };
 };
+const setGroupDetail = (groupDetail) => {
+  return (dispatch) => {
+    dispatch({type: 'GROUPDETAIL', payload: {groupDetail}});
+  };
+};
 
-export {userAuthAction};
+export {userAuthAction, setGroupDetail};

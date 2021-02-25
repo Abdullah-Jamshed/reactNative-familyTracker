@@ -9,12 +9,16 @@ import {
   Dimensions,
 } from 'react-native';
 
+//redux
+import {connect} from 'react-redux';
+import {setGroupDetail} from '../store/actions/homeActions';
+
 // Icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const {width, height} = Dimensions.get('window');
 
-const GroupDetailScreen = ({navigation}) => {
+const GroupDetailScreen = ({navigation, groupDetail, setGroupDetail}) => {
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.container}>
@@ -27,56 +31,72 @@ const GroupDetailScreen = ({navigation}) => {
               name="left"
               size={25}
               color={'#fe6666'}
-              onPress={() => navigation.goBack()}
+              onPress={() => {
+                setGroupDetail(null);
+                navigation.goBack();
+              }}
             />
           </View>
           <Text style={styles.heading}>Groups Details</Text>
         </View>
-        <View style={styles.groupSecretsContainer}>
-          <View style={styles.groupSecrets}>
-            <Text style={styles.secretHeading}>Group id:</Text>
-            <Text>wwsd748vsd7dfs</Text>
-          </View>
-          <View style={styles.groupSecrets}>
-            <Text style={styles.secretHeading}>Group key:</Text>
-            <Text>486486</Text>
-          </View>
-        </View>
+        {groupDetail && (
+          <>
+            <View style={styles.groupSecretsContainer}>
+              <View style={styles.groupSecrets}>
+                <Text style={styles.secretHeading}>Group id:</Text>
+                <Text>{groupDetail.groupId}</Text>
+              </View>
+              <View style={styles.groupSecrets}>
+                <Text style={styles.secretHeading}>Group key:</Text>
+                <Text>{groupDetail.groupKey}</Text>
+              </View>
+            </View>
 
-        <View style={{marginTop: 0, flex: 1}}>
-          <View style={{padding: 10}}>
-            <Text style={[styles.heading, {fontSize: 16, marginLeft: 0}]}>
-              Groups Memebers:
-            </Text>
-          </View>
-          <ScrollView
-            contentContainerStyle={{
-              flexGrow: 1,
-              width,
-              paddingVertical: 20,
-              paddingHorizontal: 10,
-              //   backgroundColor:"red"
-            }}>
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((k, i) => {
-              return (
-                <TouchableOpacity
-                  key={i}
-                  activeOpacity={1}
-                  style={styles.groupContainer}>
-                  <View style={{flexDirection: 'row'}}>
-                    <View style={styles.groupImage}>
-                      <AntDesign name="user" size={40} color={'#e6e6e6'} />
-                    </View>
-                    <View style={styles.groupDetail}>
-                      <Text style={{fontSize: 15}}>Member Name</Text>
-                      {/* <Text style={{fontSize: 12}}>5 memebers</Text> */}
-                    </View>
+            <View style={{marginTop: 0, flex: 1}}>
+              <View style={{padding: 10}}>
+                <Text style={[styles.heading, {fontSize: 16, marginLeft: 0}]}>
+                  Groups Memebers:
+                </Text>
+              </View>
+              <ScrollView
+                contentContainerStyle={{
+                  flexGrow: 1,
+                  width,
+                  paddingVertical: 20,
+                  paddingHorizontal: 10,
+                  //   backgroundColor:"red"
+                }}>
+                {groupDetail.members.length !== 0 ? (
+                  groupDetail.members.map((k, i) => {
+                    return (
+                      <TouchableOpacity
+                        key={i}
+                        activeOpacity={1}
+                        style={styles.groupContainer}>
+                        <View style={{flexDirection: 'row'}}>
+                          <View style={styles.groupImage}>
+                            <AntDesign
+                              name="user"
+                              size={40}
+                              color={'#e6e6e6'}
+                            />
+                          </View>
+                          <View style={styles.groupDetail}>
+                            <Text style={{fontSize: 15}}>Member Name</Text>
+                          </View>
+                        </View>
+                      </TouchableOpacity>
+                    );
+                  })
+                ) : (
+                  <View style={styles.subHeadingCont}>
+                    <Text style={styles.subHeading}>No Any Members</Text>
                   </View>
-                </TouchableOpacity>
-              );
-            })}
-          </ScrollView>
-        </View>
+                )}
+              </ScrollView>
+            </View>
+          </>
+        )}
       </View>
     </SafeAreaView>
   );
@@ -150,6 +170,26 @@ const styles = StyleSheet.create({
     marginRight: 10,
     fontWeight: 'bold',
   },
+  subHeading: {
+    fontSize: 16,
+    textTransform: 'uppercase',
+  },
+  subHeadingCont: {
+    padding: 20,
+    alignItems: 'center',
+  },
 });
 
-export default GroupDetailScreen;
+const mapStatetoProps = (state) => {
+  return {
+    userAuth: state.homeReducer.userAuth,
+    groupDetail: state.homeReducer.groupDetail,
+  };
+};
+const mapDispatchtoProps = (dispatch) => {
+  return {
+    setGroupDetail: (groupDetail) => dispatch(setGroupDetail(groupDetail)),
+  };
+};
+
+export default connect(mapStatetoProps, mapDispatchtoProps)(GroupDetailScreen);

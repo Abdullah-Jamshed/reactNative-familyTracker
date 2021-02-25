@@ -62,13 +62,6 @@ const CreateGroupScreen = ({navigation, userAuth}) => {
       });
   };
 
-  // members: {
-  //   0: {
-  //     uid: '4da86d4a6s',
-  //     name: 'Member Name',
-  //   },
-  // },
-
   useEffect(() => {
     makeid();
   }, []);

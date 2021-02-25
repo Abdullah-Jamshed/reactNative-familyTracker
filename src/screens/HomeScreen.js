@@ -7,6 +7,9 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+// Redux
+import {connect} from 'react-redux';
+
 // firebase
 import firestore from '@react-native-firebase/firestore';
 
@@ -15,7 +18,6 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 // Screen
 //Component
-// Redux
 
 const HomeScreen = ({navigation, userAuth}) => {
   const createUser = async () => {
@@ -83,8 +85,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
-
-import {connect} from 'react-redux';
 
 const mapStatetoProps = (state) => {
   return {
