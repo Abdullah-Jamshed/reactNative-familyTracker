@@ -90,16 +90,12 @@ const CreateGroupScreen = ({navigation, userAuth, groupsFetch}) => {
         </View>
         <Text style={styles.heading}>Create Group</Text>
       </View>
-      {/* <View style={styles.headingContainer}>
-        <Text style={styles.heading}>Create Groups</Text>
-      </View> */}
       <View
         style={{
           alignItems: 'center',
           justifyContent: 'center',
           marginTop: 20,
         }}>
-        {/* <Text style={styles.inputLabel}>Group Name</Text> */}
         <TextInput
           value={groupName}
           placeholder="Group name"
@@ -133,14 +129,6 @@ const CreateGroupScreen = ({navigation, userAuth, groupsFetch}) => {
             Create Group
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            firestore().collection('groups').doc('7urn').delete();
-            navigation.goBack();
-          }}
-          style={[styles.button, {marginTop: 10}]}>
-          <Text style={styles.buttonText}>Delete Group</Text>
-        </TouchableOpacity>
       </View>
     </View>
   );
@@ -150,8 +138,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#ffffff',
-    // alignItems: 'center',
-    // justifyContent: 'center',
   },
   heading: {
     fontSize: 18,

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   Text,
@@ -83,8 +83,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#ffffff',
     alignItems: 'center',
-    // justifyContent: 'center',
-    // paddingTop: 20,
   },
   heading: {
     fontSize: 18,
@@ -100,14 +98,12 @@ const styles = StyleSheet.create({
   addGroupButtonContainer: {
     position: 'absolute',
     bottom: 100,
-    // right: 20,
   },
   addGroupButton: {},
   groupContainer: {
     marginBottom: 20,
     backgroundColor: '#ffffff',
     borderRadius: 10,
-    // paddingLeft:5,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
