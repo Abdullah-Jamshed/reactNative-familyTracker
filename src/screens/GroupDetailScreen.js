@@ -63,11 +63,12 @@ const GroupDetailScreen = ({navigation, groupDetail, setGroupDetail}) => {
                   flexGrow: 1,
                   width,
                   paddingVertical: 20,
-                  paddingHorizontal: 10,
-                  //   backgroundColor:"red"
+                  alignItems: 'center',
+                  // paddingHorizontal: 10,
                 }}>
                 {groupDetail.members.length !== 0 ? (
-                  groupDetail.members.map((k, i) => {
+                  //  groupDetail.members.map((k, i) => {
+                  [1, 3, 5].map((member, i) => {
                     return (
                       <TouchableOpacity
                         key={i}
@@ -82,7 +83,10 @@ const GroupDetailScreen = ({navigation, groupDetail, setGroupDetail}) => {
                             />
                           </View>
                           <View style={styles.groupDetail}>
-                            <Text style={{fontSize: 15}}>Member Name</Text>
+                            <Text style={{fontSize: 15}}>{member.name}</Text>
+                            {member.uid === groupDetail.adminUID && (
+                              <Text style={styles.badge}>admin</Text>
+                            )}
                           </View>
                         </View>
                       </TouchableOpacity>
@@ -121,12 +125,6 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     width,
   },
-  addGroupButtonContainer: {
-    position: 'absolute',
-    bottom: 100,
-    // right: 20,
-  },
-  addGroupButton: {},
   groupContainer: {
     marginBottom: 20,
     backgroundColor: '#ffffff',
@@ -138,8 +136,8 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.22,
     shadowRadius: 2.21,
-
     elevation: 3,
+    width: width / 1.1,
   },
   groupImage: {
     width: 50,
@@ -153,7 +151,13 @@ const styles = StyleSheet.create({
   groupDetail: {
     paddingLeft: 10,
     paddingVertical: 5,
-    justifyContent: 'center',
+    paddingRight: 10,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
+    width: width / 1.1 - 50,
+    borderTopRightRadius: 10,
+    borderBottomRightRadius: 10,
   },
   groupSecretsContainer: {
     width,
@@ -177,6 +181,15 @@ const styles = StyleSheet.create({
   subHeadingCont: {
     padding: 20,
     alignItems: 'center',
+  },
+  badge: {
+    fontSize: 13,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderWidth: 0.5,
+    borderRadius: 60,
+    color: '#fe6666',
+    borderColor: '#fe6666',
   },
 });
 
