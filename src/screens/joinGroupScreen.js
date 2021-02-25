@@ -7,14 +7,46 @@ import {
   Dimensions,
   StyleSheet,
 } from 'react-native';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const {width, height} = Dimensions.get('window');
 
-const JoinGroupScreen = ({navigation}) => {
+//redux
+import {connect} from 'react-redux';
+// firebase
+import firestore from '@react-native-firebase/firestore';
+// icons
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
+const JoinGroupScreen = ({navigation, userAuth}) => {
   const [id, setId] = useState('');
   const [key, setKey] = useState('');
+  const [groupNotExits, setGroupNotExits] = useState(false);
+  const [wrongKey, setWrongKey] = useState(false);
 
+  const joinGroup = async () => {
+    groupNotExits && setGroupExits(false);
+    wrongKey && setWrongKey(false);
+    const dataObj = await firestore().collection('groups').doc(id).get();
+
+    if (dataObj.exists) {
+      const {groupKey} = dataObj.data();
+      if (key == groupKey) {
+        firestore()
+          .collection('users')
+          .doc(userAuth.uid)
+          .update({
+            groupsJoined: firestore.FieldValue.arrayUnion(id),
+          });
+        setId('');
+        setKey('');
+        navigation.goBack();
+      } else {
+        setWrongKey(true);
+      }
+    } else {
+      setGroupNotExits(true);
+    }
+  };
   return (
     <View style={styles.container}>
       <View style={styles.headingContainer}>
@@ -31,9 +63,6 @@ const JoinGroupScreen = ({navigation}) => {
         </View>
         <Text style={styles.heading}>Join Group</Text>
       </View>
-      {/* <View style={styles.headingContainer}>
-        <Text style={styles.heading}>Create Groups</Text>
-      </View> */}
       <View
         style={{
           alignItems: 'center',
@@ -46,6 +75,11 @@ const JoinGroupScreen = ({navigation}) => {
           style={styles.inputFeild}
           onChangeText={(text) => setId(text.trim())}
         />
+        {groupNotExits && (
+          <View style={styles.helperTextContainer}>
+            <Text style={styles.helperText}>wrong group id</Text>
+          </View>
+        )}
         <TextInput
           value={key}
           placeholder="Group key"
@@ -53,12 +87,15 @@ const JoinGroupScreen = ({navigation}) => {
           onChangeText={(text) => setKey(text.trim())}
           maxLength={5}
         />
+        {wrongKey && (
+          <View style={styles.helperTextContainer}>
+            <Text style={styles.helperText}>wrong group key</Text>
+          </View>
+        )}
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
-          onPress={() => {
-            console.log('button works...');
-          }}
+          onPress={joinGroup}
           style={id && key ? styles.button : styles.disabledButton}
           disabled={!(id && key)}>
           <Text
@@ -129,6 +166,22 @@ const styles = StyleSheet.create({
     color: '#000',
     fontWeight: 'bold',
   },
+  helperTextContainer: {
+    width: width / 1.15,
+  },
+  helperText: {
+    fontSize: 12,
+    color: '#fe6666',
+  },
 });
 
-export default JoinGroupScreen;
+const mapStatetoProps = (state) => {
+  return {
+    userAuth: state.homeReducer.userAuth,
+  };
+};
+const mapDispatchtoProps = () => {
+  return {};
+};
+
+export default connect(mapStatetoProps, mapDispatchtoProps)(JoinGroupScreen);

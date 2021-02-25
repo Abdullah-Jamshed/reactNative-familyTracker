@@ -81,7 +81,6 @@ const LoginScreen = ({navigation}) => {
           style={email && password ? styles.button : styles.disabledButton}
           disabled={!(email && password)}>
           <Text
-            //  style={styles.buttonText}
             style={
               email && password ? styles.buttonText : styles.disabledButtonText
             }>
