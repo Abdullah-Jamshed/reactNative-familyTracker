@@ -21,7 +21,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const {width, height} = Dimensions.get('window');
 
-const GroupScreen = ({navigation, userAuth,setGroupDetail}) => {
+const GroupScreen = ({navigation, userAuth, setGroupDetail}) => {
   const [groups, setGroups] = useState([]);
 
   const userUID = userAuth.uid;
@@ -35,21 +35,42 @@ const GroupScreen = ({navigation, userAuth,setGroupDetail}) => {
       .collection('groups')
       .where('groupId', 'in', groupsId)
       .get();
-
-    // console.log(groupObj.docs);
     setGroups(groupObj.docs);
+  };
 
-    // groupObj.docs.forEach((doc) => doc.data()));
+  const groupFetch = async () => {
+    const groupsId = await (
+      await firestore().collection('users').doc(`${userUID}`).get()
+    ).data().groupsJoined;
 
-    // setGroups(groupsId);
-    // const groups = await (await firestore().collection('groups').doc('groupid').get()).data();
-    // const groups = await firestore().collection('groups').doc('groupid').get();
-    // console.log('groups ==>>', groups.data());
+    const onResult = (QuerySnapshot) => {
+      setGroups(QuerySnapshot.docs);
+
+      // QuerySnapshot.docs.map((dataVal) => {
+      //   const data = dataVal.data();
+      //   console.log('================');
+      //   console.log(data);
+      // });
+      // console.log('QuerySnapshot ==>>>', QuerySnapshot.docs);
+    };
+
+    const onError = (error) => {
+      console.error(error);
+    };
+
+    firestore()
+      .collection('groups')
+      .where('groupId', 'in', groupsId)
+      .onSnapshot(onResult, onError);
   };
 
   useEffect(() => {
-    store();
+    groupFetch();
   }, []);
+
+  // useEffect(() => {
+  //   store();
+  // }, []);
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -72,7 +93,7 @@ const GroupScreen = ({navigation, userAuth,setGroupDetail}) => {
                 return (
                   <TouchableOpacity
                     onPress={() => {
-                      setGroupDetail(group)
+                      setGroupDetail(group);
                       navigation.navigate('GroupDetail');
                     }}
                     key={i}
@@ -170,7 +191,7 @@ const mapStatetoProps = (state) => {
 };
 const mapDispatchtoProps = (dispatch) => {
   return {
-    setGroupDetail: (groupDetail) => dispatch(setGroupDetail(groupDetail))
+    setGroupDetail: (groupDetail) => dispatch(setGroupDetail(groupDetail)),
   };
 };
 
