@@ -10,6 +10,7 @@ import {
 
 // redux
 import {connect} from 'react-redux';
+import {groupsFetch} from '../store/actions/homeActions';
 
 // icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -19,7 +20,7 @@ import firestore from '@react-native-firebase/firestore';
 
 const {width, height} = Dimensions.get('window');
 
-const CreateGroupScreen = ({navigation, userAuth}) => {
+const CreateGroupScreen = ({navigation, userAuth, groupsFetch}) => {
   const [groupName, setGroupName] = useState('');
   const [id, setId] = useState('');
   const [key, setKey] = useState('');
@@ -54,6 +55,7 @@ const CreateGroupScreen = ({navigation, userAuth}) => {
         ],
       })
       .then(() => {
+        groupsFetch();
         firestore()
           .collection('users')
           .doc(userAuth.uid)
@@ -131,6 +133,14 @@ const CreateGroupScreen = ({navigation, userAuth}) => {
             Create Group
           </Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            firestore().collection('groups').doc('7urn').delete();
+            navigation.goBack();
+          }}
+          style={[styles.button, {marginTop: 10}]}>
+          <Text style={styles.buttonText}>Delete Group</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -202,7 +212,9 @@ const mapStatetoProps = (state) => {
   };
 };
 const mapDispatchtoProps = (dispatch) => {
-  return {};
+  return {
+    groupsFetch: () => dispatch(groupsFetch()),
+  };
 };
 
 export default connect(mapStatetoProps, mapDispatchtoProps)(CreateGroupScreen);

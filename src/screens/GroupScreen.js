@@ -11,66 +11,17 @@ import {
 
 //redux
 import {connect} from 'react-redux';
-import {setGroupDetail} from '../store/actions/homeActions';
-
-// firebase
-import firestore from '@react-native-firebase/firestore';
+import {setGroupDetail, groupsFetch} from '../store/actions/homeActions';
 
 // Icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const {width, height} = Dimensions.get('window');
 
-const GroupScreen = ({navigation, userAuth, setGroupDetail}) => {
-  const [groups, setGroups] = useState([]);
-
-  const userUID = userAuth.uid;
-
-  const store = async () => {
-    const groupsId = await (
-      await firestore().collection('users').doc(`${userUID}`).get()
-    ).data().groupsJoined;
-
-    const groupObj = await firestore()
-      .collection('groups')
-      .where('groupId', 'in', groupsId)
-      .get();
-    setGroups(groupObj.docs);
-  };
-
-  const groupFetch = async () => {
-    const groupsId = await (
-      await firestore().collection('users').doc(`${userUID}`).get()
-    ).data().groupsJoined;
-
-    const onResult = (QuerySnapshot) => {
-      setGroups(QuerySnapshot.docs);
-
-      // QuerySnapshot.docs.map((dataVal) => {
-      //   const data = dataVal.data();
-      //   console.log('================');
-      //   console.log(data);
-      // });
-      // console.log('QuerySnapshot ==>>>', QuerySnapshot.docs);
-    };
-
-    const onError = (error) => {
-      console.error(error);
-    };
-
-    firestore()
-      .collection('groups')
-      .where('groupId', 'in', groupsId)
-      .onSnapshot(onResult, onError);
-  };
-
+const GroupScreen = ({navigation, setGroupDetail, groupsFetch, groups}) => {
   useEffect(() => {
-    groupFetch();
+    groupsFetch();
   }, []);
-
-  // useEffect(() => {
-  //   store();
-  // }, []);
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -85,7 +36,6 @@ const GroupScreen = ({navigation, userAuth, setGroupDetail}) => {
               width,
               paddingVertical: 20,
               paddingHorizontal: 10,
-              //   backgroundColor:"red"
             }}>
             {groups !== 0 &&
               groups.map((groupVal, i) => {
@@ -186,12 +136,13 @@ const styles = StyleSheet.create({
 
 const mapStatetoProps = (state) => {
   return {
-    userAuth: state.homeReducer.userAuth,
+    groups: state.homeReducer.groups,
   };
 };
 const mapDispatchtoProps = (dispatch) => {
   return {
     setGroupDetail: (groupDetail) => dispatch(setGroupDetail(groupDetail)),
+    groupsFetch: () => dispatch(groupsFetch()),
   };
 };
 
