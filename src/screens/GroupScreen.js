@@ -15,6 +15,7 @@ import {setGroupDetail, groupsFetch} from '../store/actions/homeActions';
 
 // Icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import {back} from 'react-native/Libraries/Animated/src/Easing';
 
 const {width, height} = Dimensions.get('window');
 
@@ -29,16 +30,16 @@ const GroupScreen = ({navigation, setGroupDetail, groupsFetch, groups}) => {
         <View style={styles.headingContainer}>
           <Text style={styles.heading}>Groups</Text>
         </View>
-        <View style={{marginTop: 20, marginBottom: 190}}>
-          <ScrollView
-            contentContainerStyle={{
-              flexGrow: 1,
-              width,
-              paddingVertical: 20,
-              paddingHorizontal: 10,
-            }}>
-            {groups !== 0 &&
-              groups.map((groupVal, i) => {
+        {groups.length !== 0 ? (
+          <View style={{marginTop: 20, marginBottom: 190}}>
+            <ScrollView
+              contentContainerStyle={{
+                flexGrow: 1,
+                width,
+                paddingVertical: 20,
+                paddingHorizontal: 10,
+              }}>
+              {groups.map((groupVal, i) => {
                 const group = groupVal.data();
                 return (
                   <TouchableOpacity
@@ -63,8 +64,18 @@ const GroupScreen = ({navigation, setGroupDetail, groupsFetch, groups}) => {
                   </TouchableOpacity>
                 );
               })}
-          </ScrollView>
-        </View>
+            </ScrollView>
+          </View>
+        ) : (
+          <View
+            style={{
+              marginTop: 50,
+            }}>
+            <Text style={{fontSize: 15, fontWeight: 'bold', color: '#fe6666'}}>
+              No group joined
+            </Text>
+          </View>
+        )}
 
         <View style={styles.addGroupButtonContainer}>
           <TouchableOpacity
@@ -83,6 +94,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#ffffff',
     alignItems: 'center',
+    // justifyContent:"center"
   },
   heading: {
     fontSize: 18,
