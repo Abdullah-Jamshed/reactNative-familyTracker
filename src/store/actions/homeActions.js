@@ -6,11 +6,19 @@ const userAuthAction = (userAuth) => {
     dispatch({type: 'USERAUTH', payload: {userAuth}});
   };
 };
+
 const setGroupDetail = (groupDetail) => {
   return (dispatch) => {
     dispatch({type: 'GROUPDETAIL', payload: {groupDetail}});
   };
 };
+
+const setSelectedGroup = (selectedGroup) => {
+  return (dispatch) => {
+    dispatch({type: 'SELECTGROUP', payload: {selectedGroup}});
+  };
+};
+
 const groupsFetch = () => {
   return async (dispatch, getState) => {
     const {userAuth} = getState().homeReducer;
@@ -22,7 +30,7 @@ const groupsFetch = () => {
 
     const onResult = (QuerySnapshot) => {
       const groups = QuerySnapshot.docs;
-      console.log("===>>> ",groups)
+      console.log('===>>> ', groups);
       dispatch({type: 'GROUPS', payload: {groups}});
     };
 
@@ -40,4 +48,4 @@ const groupsFetch = () => {
   };
 };
 
-export {userAuthAction, setGroupDetail, groupsFetch};
+export {userAuthAction, setGroupDetail, groupsFetch, setSelectedGroup};

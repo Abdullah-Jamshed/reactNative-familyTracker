@@ -2,6 +2,7 @@ const INITIAL_STATE = {
   userAuth: null,
   groupDetail: null,
   groups: [],
+  selectedGroup: null,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -20,6 +21,11 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         groupDetail: action.payload.groupDetail,
+      };
+    case 'SELECTGROUP':
+      return {
+        ...state,
+        selectedGroup: action.payload.selectedGroup,
       };
     default:
       return state;

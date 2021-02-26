@@ -5,6 +5,8 @@ import {
   Dimensions,
   PermissionsAndroid,
   TouchableOpacity,
+  SafeAreaView,
+  Text,
 } from 'react-native';
 import {connect} from 'react-redux';
 
@@ -14,11 +16,14 @@ import Geolocation from 'react-native-geolocation-service';
 // import MapViewDirections from 'react-native-maps-directions';
 
 // Icons
-import Fontisto from 'react-native-vector-icons/Fontisto';
+import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 // Map style
 import mapStyle from '../styles';
+
+// Components
+import DropDown from '../components/DropDown';
 
 const {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -70,67 +75,63 @@ const MapScreen = () => {
 
   return (
     <>
-      <MapView
-        onRegionChange={({longitudeDelta, latitudeDelta}) => {
-          // setRadius(Math.round(((longitudeDelta + latitudeDelta) ) * 3000));
-        }}
-        // onPress={({nativeEvent}) => console.log(nativeEvent.coordinate)}
-        provider={PROVIDER_GOOGLE}
-        style={styles.absolute}
-        initialRegion={{
-          latitude: 24.885204,
-          longitude: 67.169733,
-          latitudeDelta: 0.01,
-          longitudeDelta: 0.01 * ASPECT_RATIO,
-        }}
-        region={
-          location && {
-            latitude: location.latitude,
-            longitude: location.longitude,
-            latitudeDelta: 0.01,
-            longitudeDelta: 0.01 * ASPECT_RATIO,
-          }
-        }
-        customMapStyle={mapStyle}>
-        <>
-          {location && (
+      <SafeAreaView style={{flex: 1}}>
+        <View style={styles.container}>
+          <MapView
+            onRegionChange={({longitudeDelta, latitudeDelta}) => {
+              // setRadius(Math.round(((longitudeDelta + latitudeDelta) ) * 3000));
+            }}
+            // onPress={({nativeEvent}) => console.log(nativeEvent.coordinate)}
+            provider={PROVIDER_GOOGLE}
+            style={styles.absolute}
+            initialRegion={{
+              latitude: 24.885204,
+              longitude: 67.169733,
+              latitudeDelta: 0.01,
+              longitudeDelta: 0.01 * ASPECT_RATIO,
+            }}
+            region={
+              location && {
+                latitude: location.latitude,
+                longitude: location.longitude,
+                latitudeDelta: 0.01,
+                longitudeDelta: 0.01 * ASPECT_RATIO,
+              }
+            }
+            customMapStyle={mapStyle}>
             <>
-              <Marker
-                coordinate={{
-                  latitude: location.latitude,
-                  longitude: location.longitude,
-                }}>
-                <View style={styles.pin}>
-                  <MaterialIcons name="my-location" size={20} color="#02dcf9" />
-                </View>
-              </Marker>
+              {location && (
+                <>
+                  <Marker
+                    coordinate={{
+                      latitude: location.latitude,
+                      longitude: location.longitude,
+                    }}>
+                    <View style={styles.pin}>
+                      <MaterialIcons
+                        name="my-location"
+                        size={20}
+                        color="#02dcf9"
+                      />
+                    </View>
+                  </Marker>
+                </>
+              )}
             </>
-          )}
-        </>
+          </MapView>
 
-        {/* <MapViewDirections
-          mode="WALKING"
-          apiKey={REACT_APP_API_KEY}
-          origin={{
-            latitude: 24.885204,
-            longitude: 67.169733,
-          }}
-          destination={{
-            latitude: 24.886192,
-            longitude: 67.175808,
-          }}
-          strokeWidth={3}
-          strokeColor="#000"
-          fillColor="#000"
-        /> */}
-      </MapView>
+          <TouchableOpacity
+            style={styles.locationButton}
+            activeOpacity={0.8}
+            onPress={currentLocation}>
+            <MaterialIcons name="my-location" size={25} color="#02dcf9" />
+          </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.locationButton}
-        activeOpacity={0.8}
-        onPress={currentLocation}>
-        <MaterialIcons name="my-location" size={25} color="#02dcf9" />
-      </TouchableOpacity>
+          <View>
+            <DropDown />
+          </View>
+        </View>
+      </SafeAreaView>
     </>
   );
 };
@@ -138,6 +139,9 @@ const MapScreen = () => {
 const styles = StyleSheet.create({
   absolute: {
     ...StyleSheet.absoluteFillObject,
+    flex: 1,
+  },
+  container: {
     flex: 1,
   },
   locationButton: {

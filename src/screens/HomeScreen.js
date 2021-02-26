@@ -9,6 +9,7 @@ import {
 
 // Redux
 import {connect} from 'react-redux';
+import {groupsFetch} from '../store/actions/homeActions';
 
 // firebase
 import firestore from '@react-native-firebase/firestore';
@@ -19,7 +20,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 // Screen
 //Component
 
-const HomeScreen = ({navigation, userAuth}) => {
+const HomeScreen = ({navigation, userAuth, groupsFetch}) => {
   const createUser = async () => {
     const userUID = userAuth.uid;
     const respone = await firestore().collection('users').doc(userUID).get();
@@ -34,6 +35,7 @@ const HomeScreen = ({navigation, userAuth}) => {
 
   useEffect(() => {
     createUser();
+    groupsFetch();
   }, []);
 
   return (
@@ -93,8 +95,10 @@ const mapStatetoProps = (state) => {
     userAuth: state.homeReducer.userAuth,
   };
 };
-const mapDispatchtoProps = () => {
-  return {};
+const mapDispatchtoProps = (dispatch) => {
+  return {
+    groupsFetch: () => dispatch(groupsFetch()),
+  };
 };
 
 export default connect(mapStatetoProps, mapDispatchtoProps)(HomeScreen);
