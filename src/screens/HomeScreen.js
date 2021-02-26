@@ -26,6 +26,8 @@ const HomeScreen = ({navigation, userAuth}) => {
     if (!respone.exists) {
       firestore().collection('users').doc(userUID).set({
         userUID: userAuth.uid,
+        userName: userAuth.displayName,
+        groupsJoined: [],
       });
     }
   };

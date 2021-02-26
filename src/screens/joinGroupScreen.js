@@ -12,12 +12,14 @@ const {width, height} = Dimensions.get('window');
 
 //redux
 import {connect} from 'react-redux';
+import {groupsFetch} from '../store/actions/homeActions';
+
 // firebase
 import firestore from '@react-native-firebase/firestore';
 // icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
-const JoinGroupScreen = ({navigation, userAuth}) => {
+const JoinGroupScreen = ({navigation, userAuth, groupsFetch}) => {
   const [id, setId] = useState('');
   const [key, setKey] = useState('');
   const [groupNotExits, setGroupNotExits] = useState(false);
@@ -37,6 +39,7 @@ const JoinGroupScreen = ({navigation, userAuth}) => {
           .update({
             groupsJoined: firestore.FieldValue.arrayUnion(id),
           });
+        groupsFetch();
         setId('');
         setKey('');
         navigation.goBack();
@@ -180,8 +183,10 @@ const mapStatetoProps = (state) => {
     userAuth: state.homeReducer.userAuth,
   };
 };
-const mapDispatchtoProps = () => {
-  return {};
+const mapDispatchtoProps = (dispatch) => {
+  return {
+    groupsFetch: () => dispatch(groupsFetch()),
+  };
 };
 
 export default connect(mapStatetoProps, mapDispatchtoProps)(JoinGroupScreen);

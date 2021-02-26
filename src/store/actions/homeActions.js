@@ -15,12 +15,14 @@ const groupsFetch = () => {
   return async (dispatch, getState) => {
     const {userAuth} = getState().homeReducer;
     const userUID = userAuth.uid;
+
     const groupsId = await (
       await firestore().collection('users').doc(`${userUID}`).get()
     ).data().groupsJoined;
 
     const onResult = (QuerySnapshot) => {
       const groups = QuerySnapshot.docs;
+      console.log("===>>> ",groups)
       dispatch({type: 'GROUPS', payload: {groups}});
     };
 
@@ -29,10 +31,12 @@ const groupsFetch = () => {
       dispatch({type: 'GROUPS', payload: {groups: []}});
     };
 
-    firestore()
-      .collection('groups')
-      .where('groupId', 'in', groupsId)
-      .onSnapshot(onResult, onError);
+    if (groupsId.length !== 0) {
+      firestore()
+        .collection('groups')
+        .where('groupId', 'in', groupsId)
+        .onSnapshot(onResult, onError);
+    }
   };
 };
 
