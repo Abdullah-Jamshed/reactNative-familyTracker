@@ -12,10 +12,9 @@ import {connect} from 'react-redux';
 import {setSelectedGroup} from '../store/actions/homeActions';
 
 // Icons
-import Feather from 'react-native-vector-icons/Feather';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const {width, height} = Dimensions.get('window');
-const ASPECT_RATIO = width / height;
 
 const DropDown = ({groups, selectedGroup, setSelectedGroup}) => {
   const [dropDownShow, setDropDownShow] = useState(false);
@@ -42,9 +41,9 @@ const DropDown = ({groups, selectedGroup, setSelectedGroup}) => {
             )}
           </View>
         </View>
-        {/* <View>
-          <Feather name="heart" size={20} style={{color: '#8b8d96'}} />
-        </View> */}
+        <View>
+          <AntDesign name="down" size={20} style={{color: '#8b8d96'}} />
+        </View>
       </TouchableOpacity>
 
       {dropDownShow && (
