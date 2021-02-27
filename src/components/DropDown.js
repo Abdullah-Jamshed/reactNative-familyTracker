@@ -19,10 +19,6 @@ const {width, height} = Dimensions.get('window');
 const DropDown = ({groups, selectedGroup, setSelectedGroup}) => {
   const [dropDownShow, setDropDownShow] = useState(false);
 
-  useEffect(() => {
-    selectedGroup && console.log('selectedGroup ====>>>', selectedGroup);
-  }, [selectedGroup]);
-
   return (
     <SafeAreaView style={styles.safeContainer}>
       <TouchableOpacity

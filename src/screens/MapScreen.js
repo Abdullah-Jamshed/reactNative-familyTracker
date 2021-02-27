@@ -11,12 +11,18 @@ import {
 
 // redux
 import {connect} from 'react-redux';
-import {setlocationPermission} from '../store/actions/homeActions';
+import {
+  setlocationPermission,
+  userAuthAction,
+} from '../store/actions/homeActions';
 
 // Libraries Components
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 // import MapViewDirections from 'react-native-maps-directions';
+
+//firebase
+import firestore, {firebase} from '@react-native-firebase/firestore';
 
 // Icons
 import Feather from 'react-native-vector-icons/Feather';
@@ -31,25 +37,14 @@ import DropDown from '../components/DropDown';
 const {width, height} = Dimensions.get('window');
 // const ASPECT_RATIO = width / height;
 
-const MapScreen = ({locationPermission, setlocationPermission}) => {
+const MapScreen = ({
+  locationPermission,
+  selectedGroup,
+  setlocationPermission,
+  userAuth,
+}) => {
   const [location, setLocation] = useState(null);
-  // const [hasLocationPermission, setHasLocationPermission] = useState(null);
-
-  // const getLocationPermission = async () => {
-  //   const granted = await PermissionsAndroid.check(
-  //     PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-  //   );
-  //   if (granted) {
-  //     // console.log('ALready Have Permission');
-  //     setlocationPermission(granted);
-  //   } else {
-  //     const granted = await PermissionsAndroid.request(
-  //       PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-  //     );
-  //     // console.log(granted);
-  //     setlocationPermission(granted);
-  //   }
-  // };
+  const [locationArray, setLocationArray] = useState([]);
 
   const getLocationPermission = async () => {
     if (!locationPermission) {
@@ -77,21 +72,34 @@ const MapScreen = ({locationPermission, setlocationPermission}) => {
     }
   };
 
-  // const geoLocation = () => {
-  //   if (locationPermission) {
-  //     Geolocation.watchPosition(
-  //       (data) => {
-  //         console.log(data);
-  //         // setLocation(coords);
-  //       },
-  //       (error) => {
-  //         // See error code charts below.
-  //         console.log(error.code, error.message);
-  //       },
-  //       {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
-  //     );
-  //   }
-  // };
+  const getLocationArray = async () => {
+    if (selectedGroup) {
+      if (selectedGroup.members.length !== 0) {
+        const arr = selectedGroup.members.map((obj) => {
+          return obj.userUID;
+        });
+        firestore()
+          .collection('users')
+          .where('userUID', 'in', arr)
+          .onSnapshot(
+            (snapshot) => {
+              // console.log(snapshot.docs);
+              setLocationArray(snapshot.docs);
+            },
+            () => {
+              setLocationArray([]);
+            },
+          );
+      } else {
+        setLocationArray([]);
+      }
+    }
+  };
+
+  useEffect(() => {
+    getLocationArray();
+    console.log('selectedGroup ==>> ', selectedGroup);
+  }, [selectedGroup]);
 
   const currentLocation = () => {
     getLocationPermission();
@@ -147,6 +155,28 @@ const MapScreen = ({locationPermission, setlocationPermission}) => {
                   </Marker>
                 </>
               )}
+              {locationArray.length !== 0 &&
+                locationArray.map((obj, i) => {
+                  const {location, userUID} = obj.data();
+                  if (location && userUID !== userAuth.uid) {
+                    return (
+                      <Marker
+                        key={i}
+                        coordinate={{
+                          latitude: location.latitude,
+                          longitude: location.longitude,
+                        }}>
+                        <View style={styles.pin}>
+                          <MaterialIcons
+                            name="my-location"
+                            size={20}
+                            color="#000"
+                          />
+                        </View>
+                      </Marker>
+                    );
+                  }
+                })}
             </>
           </MapView>
 
@@ -199,6 +229,8 @@ const styles = StyleSheet.create({
 const mapStatetoProps = (state) => {
   return {
     locationPermission: state.homeReducer.locationPermission,
+    selectedGroup: state.homeReducer.selectedGroup,
+    userAuth: state.homeReducer.userAuth,
   };
 };
 const mapDispatchtoProps = (dispatch) => {

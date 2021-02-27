@@ -43,7 +43,7 @@ const groupsFetch = () => {
     };
 
     const onError = (error) => {
-      console.error('error from store ==>>', error);
+      // console.error('error from store ==>>', error);
       dispatch({type: 'GROUPS', payload: {groups: []}});
     };
 
