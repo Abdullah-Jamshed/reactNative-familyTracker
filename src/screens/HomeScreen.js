@@ -1,15 +1,18 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
   View,
   Text,
   TouchableOpacity,
+  PermissionsAndroid,
 } from 'react-native';
+
+import Geolocation from 'react-native-geolocation-service';
 
 // Redux
 import {connect} from 'react-redux';
-import {groupsFetch} from '../store/actions/homeActions';
+import {groupsFetch, setlocationPermission} from '../store/actions/homeActions';
 
 // firebase
 import firestore from '@react-native-firebase/firestore';
@@ -20,7 +23,15 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 // Screen
 //Component
 
-const HomeScreen = ({navigation, userAuth, groupsFetch}) => {
+const HomeScreen = ({
+  navigation,
+  userAuth,
+  groupsFetch,
+  setlocationPermission,
+  locationPermission,
+}) => {
+  const [location, setLocation] = useState(null);
+
   const createUser = async () => {
     const userUID = userAuth.uid;
     const respone = await firestore().collection('users').doc(userUID).get();
@@ -33,9 +44,75 @@ const HomeScreen = ({navigation, userAuth, groupsFetch}) => {
     }
   };
 
+  const getLocationPermission = async () => {
+    const granted = await PermissionsAndroid.check(
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+    );
+    if (granted) {
+      // console.log('ALready Have Permission');
+      setlocationPermission(granted);
+    } else {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+      );
+      granted == 'granted'
+        ? setlocationPermission(true)
+        : setlocationPermission(false);
+    }
+  };
+
+  const sendLocation = async () => {
+    // console.log('location ==>>> ', location);
+    location &&
+      firestore().collection('users').doc(userAuth.uid).update({location});
+  };
+
+  // const geoLocation = () => {
+  //   // console.log('locationPermission ==>> ', locationPermission);
+  //   if (locationPermission) {
+  //     Geolocation.getCurrentPosition(
+  //       ({coords}) => {
+  //         console.log(coords);
+  //         setLocation(coords);
+  //       },
+  //       (error) => {
+  //         // See error code charts below.
+  //         console.log(error.code, error.message);
+  //       },
+  //       {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+  //     );
+  //   }
+  // };
+
+  const geoLocation = () => {
+    if (locationPermission) {
+      Geolocation.watchPosition(
+        (data) => {
+          console.log(data);
+          // setLocation(coords);
+        },
+        (error) => {
+          // See error code charts below.
+          console.log(error.code, error.message);
+        },
+        {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+      );
+    }
+  };
+
+  useEffect(() => {
+    sendLocation();
+  }, [location]);
+
+  useEffect(() => {
+    geoLocation();
+  }, [locationPermission]);
+
   useEffect(() => {
     createUser();
     groupsFetch();
+    getLocationPermission();
+    geoLocation();
   }, []);
 
   return (
@@ -93,11 +170,15 @@ const styles = StyleSheet.create({
 const mapStatetoProps = (state) => {
   return {
     userAuth: state.homeReducer.userAuth,
+    locationPermission: state.homeReducer.locationPermission,
   };
 };
 const mapDispatchtoProps = (dispatch) => {
   return {
     groupsFetch: () => dispatch(groupsFetch()),
+    setlocationPermission: (granted) => {
+      dispatch(setlocationPermission(granted));
+    },
   };
 };
 

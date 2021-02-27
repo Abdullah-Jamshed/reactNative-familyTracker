@@ -8,7 +8,10 @@ import {
   SafeAreaView,
   Text,
 } from 'react-native';
+
+// redux
 import {connect} from 'react-redux';
+import {setlocationPermission} from '../store/actions/homeActions';
 
 // Libraries Components
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
@@ -26,30 +29,41 @@ import mapStyle from '../styles';
 import DropDown from '../components/DropDown';
 
 const {width, height} = Dimensions.get('window');
-const ASPECT_RATIO = width / height;
+// const ASPECT_RATIO = width / height;
 
-const MapScreen = () => {
+const MapScreen = ({locationPermission, setlocationPermission}) => {
   const [location, setLocation] = useState(null);
-  const [hasLocationPermission, setHasLocationPermission] = useState(null);
+  // const [hasLocationPermission, setHasLocationPermission] = useState(null);
 
-  const locationPermission = async () => {
-    const granted = await PermissionsAndroid.check(
-      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-    );
-    if (granted) {
-      // console.log('ALready Have Permission');
-      setHasLocationPermission(granted);
-    } else {
+  // const getLocationPermission = async () => {
+  //   const granted = await PermissionsAndroid.check(
+  //     PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+  //   );
+  //   if (granted) {
+  //     // console.log('ALready Have Permission');
+  //     setlocationPermission(granted);
+  //   } else {
+  //     const granted = await PermissionsAndroid.request(
+  //       PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+  //     );
+  //     // console.log(granted);
+  //     setlocationPermission(granted);
+  //   }
+  // };
+
+  const getLocationPermission = async () => {
+    if (!locationPermission) {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
       );
-      // console.log(granted);
-      setHasLocationPermission(granted);
+      granted == 'granted'
+        ? setlocationPermission(true)
+        : setlocationPermission(false);
     }
   };
 
   const geoLocation = () => {
-    if (hasLocationPermission) {
+    if (locationPermission) {
       Geolocation.getCurrentPosition(
         ({coords}) => {
           setLocation(coords);
@@ -63,13 +77,29 @@ const MapScreen = () => {
     }
   };
 
+  // const geoLocation = () => {
+  //   if (locationPermission) {
+  //     Geolocation.watchPosition(
+  //       (data) => {
+  //         console.log(data);
+  //         // setLocation(coords);
+  //       },
+  //       (error) => {
+  //         // See error code charts below.
+  //         console.log(error.code, error.message);
+  //       },
+  //       {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+  //     );
+  //   }
+  // };
+
   const currentLocation = () => {
-    locationPermission();
+    getLocationPermission();
     geoLocation();
   };
 
   useEffect(() => {
-    locationPermission();
+    getLocationPermission();
     geoLocation();
   }, []);
 
@@ -88,14 +118,14 @@ const MapScreen = () => {
               latitude: 24.885204,
               longitude: 67.169733,
               latitudeDelta: 0.01,
-              longitudeDelta: 0.01 * ASPECT_RATIO,
+              longitudeDelta: 0.1,
             }}
             region={
               location && {
                 latitude: location.latitude,
                 longitude: location.longitude,
                 latitudeDelta: 0.01,
-                longitudeDelta: 0.01 * ASPECT_RATIO,
+                longitudeDelta: 0.1,
               }
             }
             customMapStyle={mapStyle}>
@@ -166,11 +196,16 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStatetoProps = () => {
-  return {};
+const mapStatetoProps = (state) => {
+  return {
+    locationPermission: state.homeReducer.locationPermission,
+  };
 };
-const mapDispatchtoProps = () => {
-  return {};
+const mapDispatchtoProps = (dispatch) => {
+  return {
+    setlocationPermission: (granted) =>
+      dispatch(setlocationPermission(granted)),
+  };
 };
 
 export default connect(mapStatetoProps, mapDispatchtoProps)(MapScreen);

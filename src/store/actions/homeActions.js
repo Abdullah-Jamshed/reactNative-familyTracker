@@ -18,6 +18,11 @@ const setSelectedGroup = (selectedGroup) => {
     dispatch({type: 'SELECTGROUP', payload: {selectedGroup}});
   };
 };
+const setlocationPermission = (granted) => {
+  return (dispatch) => {
+    dispatch({type: 'LOCATIONPERMISSION', payload: {granted}});
+  };
+};
 
 const groupsFetch = () => {
   return async (dispatch, getState) => {
@@ -30,7 +35,7 @@ const groupsFetch = () => {
 
     const onResult = (QuerySnapshot) => {
       const groups = QuerySnapshot.docs;
-      console.log('===>>> ', groups);
+      // console.log('===>>> ', groups);
       dispatch({type: 'GROUPS', payload: {groups}});
     };
 
@@ -48,4 +53,10 @@ const groupsFetch = () => {
   };
 };
 
-export {userAuthAction, setGroupDetail, groupsFetch, setSelectedGroup};
+export {
+  userAuthAction,
+  setGroupDetail,
+  groupsFetch,
+  setSelectedGroup,
+  setlocationPermission,
+};

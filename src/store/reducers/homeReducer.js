@@ -3,6 +3,7 @@ const INITIAL_STATE = {
   groupDetail: null,
   groups: [],
   selectedGroup: null,
+  locationPermission: null,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -26,6 +27,11 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         selectedGroup: action.payload.selectedGroup,
+      };
+    case 'LOCATIONPERMISSION':
+      return {
+        ...state,
+        locationPermission: action.payload.granted,
       };
     default:
       return state;
