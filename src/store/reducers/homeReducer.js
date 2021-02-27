@@ -4,6 +4,7 @@ const INITIAL_STATE = {
   groups: [],
   selectedGroup: null,
   locationPermission: null,
+  exists: false,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -27,6 +28,11 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         selectedGroup: action.payload.selectedGroup,
+      };
+    case 'USEREXITS':
+      return {
+        ...state,
+        exists: action.payload.exists,
       };
     case 'LOCATIONPERMISSION':
       return {

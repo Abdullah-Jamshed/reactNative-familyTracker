@@ -29,28 +29,9 @@ const HomeScreen = ({
   groupsFetch,
   setlocationPermission,
   locationPermission,
+  exists,
 }) => {
   const [location, setLocation] = useState(null);
-  const [exists, setExists] = useState(false);
-
-  const createUser = async () => {
-    exists && setExists(false);
-    const userUID = userAuth.uid;
-    const respone = await firestore().collection('users').doc(userUID).get();
-    setExists(respone.exists);
-    if (!respone.exists) {
-      firestore()
-        .collection('users')
-        .doc(userUID)
-        .set({
-          userUID: userAuth.uid,
-          userName: userAuth.displayName,
-          groupsJoined: [],
-          location,
-        })
-        .then(setExists(true));
-    }
-  };
 
   const getLocationPermission = async () => {
     const granted = await PermissionsAndroid.check(
@@ -69,7 +50,8 @@ const HomeScreen = ({
   };
 
   const sendLocation = async () => {
-    if (exists) {
+    const res = await firestore().collection('users').doc(userAuth.uid).get();
+    if (exists || res.exists) {
       location &&
         firestore().collection('users').doc(userAuth.uid).update({location});
     }
@@ -92,18 +74,18 @@ const HomeScreen = ({
 
   useEffect(() => {
     sendLocation();
-  }, [location]);
+  }, [exists]);
 
   useEffect(() => {
     sendLocation();
-  }, [exists]);
+  }, [location]);
 
   useEffect(() => {
     geoLocation();
   }, [locationPermission]);
 
   useEffect(() => {
-    createUser();
+    // createUser();
     groupsFetch();
     getLocationPermission();
     geoLocation();
@@ -165,6 +147,7 @@ const mapStatetoProps = (state) => {
   return {
     userAuth: state.homeReducer.userAuth,
     locationPermission: state.homeReducer.locationPermission,
+    exists: state.homeReducer.exists,
   };
 };
 const mapDispatchtoProps = (dispatch) => {

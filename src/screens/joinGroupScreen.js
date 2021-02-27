@@ -22,32 +22,56 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 const JoinGroupScreen = ({navigation, userAuth, groupsFetch}) => {
   const [id, setId] = useState('');
   const [key, setKey] = useState('');
+  const [alreadyJoined, setAlreadyJoined] = useState(false);
   const [groupNotExits, setGroupNotExits] = useState(false);
   const [wrongKey, setWrongKey] = useState(false);
 
   const joinGroup = async () => {
-    groupNotExits && setGroupExits(false);
+    alreadyJoined && setAlreadyJoined(false);
+    groupNotExits && setGroupNotExits(false);
     wrongKey && setWrongKey(false);
-    const dataObj = await firestore().collection('groups').doc(id).get();
 
-    if (dataObj.exists) {
-      const {groupKey} = dataObj.data();
-      if (key == groupKey) {
-        firestore()
-          .collection('users')
-          .doc(userAuth.uid)
-          .update({
-            groupsJoined: firestore.FieldValue.arrayUnion(id),
-          });
-        groupsFetch();
-        setId('');
-        setKey('');
-        navigation.goBack();
+    const response = await firestore()
+      .collection('users')
+      .where('userUID', '==', userAuth.uid)
+      .where('groupsJoined', 'array-contains', id)
+      .get();
+
+    if (response.docs.length == 0) {
+      const dataObj = await firestore().collection('groups').doc(id).get();
+
+      if (dataObj.exists) {
+        const {groupKey} = dataObj.data();
+        if (key == groupKey) {
+          firestore()
+            .collection('users')
+            .doc(userAuth.uid)
+            .update({
+              groupsJoined: firestore.FieldValue.arrayUnion(id),
+            })
+            .then(() => {
+              firestore()
+                .collection('groups')
+                .doc(id)
+                .update({
+                  members: firestore.FieldValue.arrayUnion({
+                    userUID: userAuth.uid,
+                    name: userAuth.displayName,
+                  }),
+                });
+            });
+          groupsFetch();
+          setId('');
+          setKey('');
+          navigation.goBack();
+        } else {
+          setWrongKey(true);
+        }
       } else {
-        setWrongKey(true);
+        setGroupNotExits(true);
       }
     } else {
-      setGroupNotExits(true);
+      setAlreadyJoined(true);
     }
   };
   return (
@@ -81,6 +105,11 @@ const JoinGroupScreen = ({navigation, userAuth, groupsFetch}) => {
         {groupNotExits && (
           <View style={styles.helperTextContainer}>
             <Text style={styles.helperText}>wrong group id</Text>
+          </View>
+        )}
+        {alreadyJoined && (
+          <View style={styles.helperTextContainer}>
+            <Text style={styles.helperText}>group Already joined</Text>
           </View>
         )}
         <TextInput

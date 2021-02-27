@@ -12,7 +12,7 @@ import {
 // Redux
 import {connect} from 'react-redux';
 // redux store actions
-import {userAuthAction} from '../store/actions/homeActions';
+import {userAuthAction, setExists} from '../store/actions/homeActions';
 
 // firebase
 import auth from '@react-native-firebase/auth';
@@ -26,7 +26,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const {width, height} = Dimensions.get('window');
 
-const SignUpScreen = ({navigation, userAuthAction}) => {
+const SignUpScreen = ({navigation, userAuthAction, setExists}) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -46,23 +46,25 @@ const SignUpScreen = ({navigation, userAuthAction}) => {
           })
           .then(() => {
             // Update successful.
-
             const currentUser = auth().currentUser;
-            console.log('currentUser', currentUser);
+            const userUID = currentUser.uid;
             firestore()
               .collection('users')
-              .doc(currentUser.uid)
-              .update({
+              .doc(userUID)
+              .set({
+                userUID: currentUser.uid,
                 userName: currentUser.displayName,
+                groupsJoined: [],
+                location: null,
               })
               .then(() => {
-                console.log('DOne');
+                setExists(true);
+                userAuthAction(currentUser);
               });
-            userAuthAction(currentUser);
           })
           .catch((error) => {
             // An error happened.
-            // console.log('Update Unsuccessful.', error);
+            console.log('Update Unsuccessful.', error);
           });
       })
       .catch((error) => {
@@ -221,6 +223,7 @@ const mapStatetoProps = (state) => {
 const mapDispatchtoProps = (dispatch) => {
   return {
     userAuthAction: (userAuth) => dispatch(userAuthAction(userAuth)),
+    setExists: (exists) => dispatch(setExists(exists)),
   };
 };
 

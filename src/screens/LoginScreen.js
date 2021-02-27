@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   Dimensions,
   StyleSheet,
+  ActivityIndicator,
 } from 'react-native';
 
 //redux
@@ -25,13 +26,16 @@ const LoginScreen = ({navigation}) => {
   const [password, setPassword] = useState('');
   const [helperTextEmail, setHelperTextEmail] = useState('');
   const [helperTextPassword, setHelperTextPassword] = useState('');
+  const [loader, setLoader] = useState(false);
 
   const signIn = () => {
+    setLoader(true);
     helperTextEmail && setHelperTextEmail('');
     helperTextPassword && setHelperTextPassword('');
     auth()
       .signInWithEmailAndPassword(email, password)
       .catch((error) => {
+        setLoader(false);
         if (error.code === 'auth/invalid-email') {
           setHelperTextEmail('Invalid Email address !');
         }
@@ -86,6 +90,13 @@ const LoginScreen = ({navigation}) => {
             }>
             Log In
           </Text>
+          {loader && (
+            <ActivityIndicator
+              color={'#fff'}
+              size="small"
+              style={{marginLeft: 5}}
+            />
+          )}
         </TouchableOpacity>
         <View style={{marginTop: 8}}>
           <TouchableOpacity activeOpacity={0.8}>
@@ -145,6 +156,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 10,
+    flexDirection: 'row',
   },
   buttonText: {
     fontWeight: 'bold',
