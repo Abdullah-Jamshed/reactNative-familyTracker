@@ -36,6 +36,7 @@ const LoginScreen = ({navigation}) => {
       .signInWithEmailAndPassword(email, password)
       .catch((error) => {
         setLoader(false);
+        console.log(error);
         if (error.code === 'auth/invalid-email') {
           setHelperTextEmail('Invalid Email address !');
         }
@@ -134,7 +135,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     position: 'absolute',
-    top: 60,
+    top: 25,
   },
   headingText: {
     fontSize: 20,
