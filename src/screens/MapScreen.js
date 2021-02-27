@@ -45,6 +45,8 @@ const MapScreen = ({
 }) => {
   const [location, setLocation] = useState(null);
   const [locationArray, setLocationArray] = useState([]);
+  // const [locationArr, setLocationArr] = useState();
+  const [delta, setDelta] = useState(null);
 
   const getLocationPermission = async () => {
     if (!locationPermission) {
@@ -98,7 +100,7 @@ const MapScreen = ({
 
   useEffect(() => {
     getLocationArray();
-    console.log('selectedGroup ==>> ', selectedGroup);
+    // console.log('selectedGroup ==>> ', selectedGroup);
   }, [selectedGroup]);
 
   const currentLocation = () => {
@@ -117,7 +119,8 @@ const MapScreen = ({
         <View style={styles.container}>
           <MapView
             onRegionChange={({longitudeDelta, latitudeDelta}) => {
-              // setRadius(Math.round(((longitudeDelta + latitudeDelta) ) * 3000));
+              console.log(longitudeDelta, latitudeDelta);
+              // setDelta({longitudeDelta, latitudeDelta});
             }}
             // onPress={({nativeEvent}) => console.log(nativeEvent.coordinate)}
             provider={PROVIDER_GOOGLE}
@@ -129,7 +132,7 @@ const MapScreen = ({
               longitudeDelta: 0.1,
             }}
             region={
-              location && {
+              locationArr && {
                 latitude: location.latitude,
                 longitude: location.longitude,
                 latitudeDelta: 0.01,
