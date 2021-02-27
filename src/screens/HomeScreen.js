@@ -31,16 +31,24 @@ const HomeScreen = ({
   locationPermission,
 }) => {
   const [location, setLocation] = useState(null);
+  const [exists, setExists] = useState(false);
 
   const createUser = async () => {
+    exists && setExists(false);
     const userUID = userAuth.uid;
     const respone = await firestore().collection('users').doc(userUID).get();
+    setExists(respone.exists);
     if (!respone.exists) {
-      firestore().collection('users').doc(userUID).set({
-        userUID: userAuth.uid,
-        userName: userAuth.displayName,
-        groupsJoined: [],
-      });
+      firestore()
+        .collection('users')
+        .doc(userUID)
+        .set({
+          userUID: userAuth.uid,
+          userName: userAuth.displayName,
+          groupsJoined: [],
+          location,
+        })
+        .then(setExists(true));
     }
   };
 
@@ -49,7 +57,6 @@ const HomeScreen = ({
       PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
     );
     if (granted) {
-      // console.log('ALready Have Permission');
       setlocationPermission(granted);
     } else {
       const granted = await PermissionsAndroid.request(
@@ -62,37 +69,20 @@ const HomeScreen = ({
   };
 
   const sendLocation = async () => {
-    // console.log('location ==>>> ', location);
-    location &&
-      firestore().collection('users').doc(userAuth.uid).update({location});
+    if (exists) {
+      location &&
+        firestore().collection('users').doc(userAuth.uid).update({location});
+    }
   };
-
-  // const geoLocation = () => {
-  //   // console.log('locationPermission ==>> ', locationPermission);
-  //   if (locationPermission) {
-  //     Geolocation.getCurrentPosition(
-  //       ({coords}) => {
-  //         console.log(coords);
-  //         setLocation(coords);
-  //       },
-  //       (error) => {
-  //         // See error code charts below.
-  //         console.log(error.code, error.message);
-  //       },
-  //       {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
-  //     );
-  //   }
-  // };
 
   const geoLocation = () => {
     if (locationPermission) {
       Geolocation.watchPosition(
-        (data) => {
-          console.log(data);
-          // setLocation(coords);
+        ({coords}) => {
+          // console.log('coords ==>> ', coords);
+          setLocation(coords);
         },
         (error) => {
-          // See error code charts below.
           console.log(error.code, error.message);
         },
         {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
@@ -103,6 +93,10 @@ const HomeScreen = ({
   useEffect(() => {
     sendLocation();
   }, [location]);
+
+  useEffect(() => {
+    sendLocation();
+  }, [exists]);
 
   useEffect(() => {
     geoLocation();

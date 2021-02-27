@@ -29,52 +29,56 @@ const ProfileScreen = ({navigation, userAuth}) => {
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <View style={styles.container}>
-        <View style={styles.photoContainer}>
-          <View style={styles.photoCircle}>
-            {userAuth.photoURL ? (
-              <Image
-                source={{uri: userAuth.photoURL}}
-                style={styles.imageStyle}
-              />
-            ) : (
-              <View style={styles.defaultImage}>
-                <AntDesign name="user" size={60} color={'#c4c4c4'} />
-              </View>
-            )}
-            <View style={styles.editButtonContainer}>
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={() => navigation.navigate('Update')}
-                style={styles.editButton}>
-                <MaterialCommunityIcons
-                  name="pencil"
-                  size={20}
-                  color={'#fff'}
+      {userAuth && (
+        <View style={styles.container}>
+          <View style={styles.photoContainer}>
+            <View style={styles.photoCircle}>
+              {userAuth.photoURL ? (
+                <Image
+                  source={{uri: userAuth.photoURL}}
+                  style={styles.imageStyle}
                 />
+              ) : (
+                <View style={styles.defaultImage}>
+                  <AntDesign name="user" size={60} color={'#c4c4c4'} />
+                </View>
+              )}
+              <View style={styles.editButtonContainer}>
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  onPress={() => navigation.navigate('Update')}
+                  style={styles.editButton}>
+                  <MaterialCommunityIcons
+                    name="pencil"
+                    size={20}
+                    color={'#fff'}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+          <View style={styles.userDetailWrapper}>
+            <View style={styles.userDetailContainer}>
+              <View style={styles.userDetail}>
+                <Text style={styles.userDetailLabel}>Name :</Text>
+                <Text style={styles.userDetailValue}>
+                  {userAuth.displayName}
+                </Text>
+              </View>
+              <View style={styles.userDetail}>
+                <Text style={styles.userDetailLabel}>Email :</Text>
+                <Text style={styles.userDetailValue}>{userAuth.email}</Text>
+              </View>
+            </View>
+
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity onPress={signOut} style={styles.button}>
+                <Text style={styles.buttonText}>Sign Out</Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
-        <View style={styles.userDetailWrapper}>
-          <View style={styles.userDetailContainer}>
-            <View style={styles.userDetail}>
-              <Text style={styles.userDetailLabel}>Name :</Text>
-              <Text style={styles.userDetailValue}>{userAuth.displayName}</Text>
-            </View>
-            <View style={styles.userDetail}>
-              <Text style={styles.userDetailLabel}>Email :</Text>
-              <Text style={styles.userDetailValue}>{userAuth.email}</Text>
-            </View>
-          </View>
-
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={signOut} style={styles.button}>
-              <Text style={styles.buttonText}>Sign Out</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
+      )}
     </SafeAreaView>
   );
 };

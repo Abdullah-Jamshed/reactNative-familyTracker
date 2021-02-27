@@ -31,25 +31,28 @@ const groupsFetch = () => {
 
     const groupsId = await (
       await firestore().collection('users').doc(`${userUID}`).get()
-    ).data().groupsJoined;
+    ).data();
 
-    const onResult = (QuerySnapshot) => {
-      const groups = QuerySnapshot.docs;
-      // console.log('===>>> ', groups);
-      dispatch({type: 'GROUPS', payload: {groups}});
-    };
+    // console.log('initial group id fetch ===>>>', userUID, groupsId);
+    //   if (groupsId) {
+    //     const onResult = (QuerySnapshot) => {
+    //       const groups = QuerySnapshot.docs;
+    //       // console.log('===>>> ', groups);
+    //       dispatch({type: 'GROUPS', payload: {groups}});
+    //     };
 
-    const onError = (error) => {
-      console.error('error from store ==>>', error);
-      dispatch({type: 'GROUPS', payload: {groups: []}});
-    };
+    //     const onError = (error) => {
+    //       console.error('error from store ==>>', error);
+    //       dispatch({type: 'GROUPS', payload: {groups: []}});
+    //     };
 
-    if (groupsId.length !== 0) {
-      firestore()
-        .collection('groups')
-        .where('groupId', 'in', groupsId)
-        .onSnapshot(onResult, onError);
-    }
+    //     if (groupsId.length !== 0) {
+    //       firestore()
+    //         .collection('groups')
+    //         .where('groupId', 'in', groupsId)
+    //         .onSnapshot(onResult, onError);
+    //     }
+    //   }
   };
 };
 

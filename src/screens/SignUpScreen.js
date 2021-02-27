@@ -16,6 +16,7 @@ import {userAuthAction} from '../store/actions/homeActions';
 
 // firebase
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 // icons
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -45,7 +46,19 @@ const SignUpScreen = ({navigation, userAuthAction}) => {
           })
           .then(() => {
             // Update successful.
-            userAuthAction(auth().currentUser);
+
+            const currentUser = auth().currentUser;
+            console.log('currentUser', currentUser);
+            firestore()
+              .collection('users')
+              .doc(currentUser.uid)
+              .update({
+                userName: currentUser.displayName,
+              })
+              .then(() => {
+                console.log('DOne');
+              });
+            userAuthAction(currentUser);
           })
           .catch((error) => {
             // An error happened.

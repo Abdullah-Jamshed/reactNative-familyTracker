@@ -49,7 +49,7 @@ const DropDown = ({groups, selectedGroup, setSelectedGroup}) => {
       {dropDownShow && (
         <View
           style={{
-            // minHeight: height / 3,
+            minHeight: height / 3,
             maxHeight: height / 2,
           }}>
           <ScrollView contentContainerStyle={styles.dropDownCont}>
